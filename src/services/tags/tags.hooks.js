@@ -1,37 +1,35 @@
 // const {
 //     authenticate
 // } = require('@feathersjs/authentication').hooks;
-const {
-    // JSON_pars_data,
-    get_new_tags,
-    set_new_tags
-} = require('../../utils/hooks');
 
 module.exports = {
     before: {
-        all: [
-            // authenticate('jwt')
-        ],
+        all: [],
         find: [],
         get: [],
         create: [
-            // JSON_pars_data(),
-            get_new_tags()
+            // context => {
+            //     console.log('/n ##### context.data => ', context.data);
+            //     return context;
+            // }
+            // authenticate('jwt')
         ],
         update: [
-            // JSON_pars_data()
+            // authenticate('jwt')
         ],
-        patch: [],
-        remove: []
+        patch: [
+            // authenticate('jwt')
+        ],
+        remove: [
+            // authenticate('jwt')
+        ]
     },
 
     after: {
         all: [],
         find: [],
         get: [],
-        create: [
-            set_new_tags()
-        ],
+        create: [],
         update: [],
         patch: [],
         remove: []

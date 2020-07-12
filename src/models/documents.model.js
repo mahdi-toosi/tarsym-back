@@ -9,12 +9,16 @@ module.exports = function (app) {
         Schema
     } = mongooseClient;
     const schema = new Schema({
-        text: {
+        title: {
+            type: String,
+            required: [true, 'به تیتر برای توضیح این مختصات نیاز است'],
+        },
+        description: {
             type: String,
             required: [true, 'به متنی برای توضیح این مختصات نیاز است'],
             // maxlength: 800
         },
-        point: {
+        coordinates: {
             type: {
                 type: String,
                 enum: ['Point'],
@@ -28,13 +32,28 @@ module.exports = function (app) {
         //     type: Number,
         //     required: true
         // },
-        tags: {
-            type: [String],
-            required: [true, 'برای سرچ بهتر کاربر ثبت حداقل یک تگ نیاز است'],
-        },
+        tags: [{
+            type: Schema.Types.ObjectId,
+            ref: 'Tag',
+            // required: [true, 'برای سرچ بهتر کاربر ثبت حداقل یک تگ نیاز است'],
+        }],
         date: {
             type: Number,
             required: [true, 'برای سرچ بهتر کاربر ثبت تاریخ نیاز است'],
+        },
+        junk: {
+            type: String,
+            required: true
+        },
+        father_id: {
+            // type: Schema.Types.ObjectId,
+            // ref: 'documents',
+            // required: true
+            type: String,
+            required: true
+        },
+        childs_id: {
+            type: Array,
         }
         // user: {
         //     id: {
