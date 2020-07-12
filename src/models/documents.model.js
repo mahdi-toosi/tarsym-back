@@ -45,12 +45,11 @@ module.exports = function (app) {
             type: String,
             required: true
         },
-        father_id: {
+        root: {
             // type: Schema.Types.ObjectId,
             // ref: 'documents',
             // required: true
-            type: String,
-            required: true
+            type: Boolean,
         },
         childs_id: {
             type: Array,
