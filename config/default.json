@@ -45,5 +45,5 @@
             }
         }
     },
-    "mongodb": "mongodb+srv://mahditoosi:2647187007051@database-ypgwj.mongodb.net/map"
+    "mongodb": "mongodb://localhost:27017/tarsymDB"
 }

@@ -4,7 +4,9 @@
 const {
     // JSON_pars_data,
     get_new_tags,
-    set_new_tags
+    set_new_tags,
+    populate_tags,
+    remove_childs
 } = require('../../utils/hooks');
 
 module.exports = {
@@ -14,27 +16,22 @@ module.exports = {
         ],
         find: [],
         get: [],
-        create: [
-            // JSON_pars_data(),
+        create: [ // JSON_pars_data(),
             get_new_tags()
         ],
-        update: [
-            // JSON_pars_data()
-        ],
+        update: [],
         patch: [],
         remove: []
     },
 
     after: {
         all: [],
-        find: [],
-        get: [],
-        create: [
-            set_new_tags()
-        ],
+        find: [populate_tags()],
+        get: [populate_tags()],
+        create: [set_new_tags()],
         update: [],
         patch: [],
-        remove: []
+        remove: [remove_childs()]
     },
 
     error: {

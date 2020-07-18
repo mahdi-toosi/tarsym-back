@@ -15,7 +15,7 @@ module.exports = {
     get_new_tags() {
         return context => {
             let allTags = context.data.tags;
-            const get_new_tags = allTags.filter(el => el._id == undefined);
+            const get_new_tags = allTags.filter(el => !el._id);
             get_new_tags.forEach(el => {
                 newTags.push(el);
                 const index = allTags.indexOf(el);
@@ -58,6 +58,54 @@ module.exports = {
             });
             newTags = [];
             return context;
+        };
+    },
+    populate_tags() {
+        return async context => {
+            const {
+                app,
+                result
+            } = context;
+            let tag_ids = new Set();
+            result.data.forEach(doc => {
+                doc.tags.forEach(tag_id => {
+                    tag_ids.add(String(tag_id));
+                });
+            });
+            const getTags = await app.service('tags').find({
+                query: {
+                    _id: {
+                        $in: [...tag_ids]
+                    }
+                }
+            });
+
+            try {
+                for (let index = 0; index < result.data.length; index++) {
+                    const doc = result.data[index];
+                    for (let index = 0; index < doc.tags.length; index++) {
+                        const tag_ID = doc.tags[index];
+                        const tag = getTags.data.filter(tag => String(tag._id) == String(tag_ID))[0];
+                        doc.tags[index] = tag;
+                    }
+                }
+            } catch (error) {
+                console.log(error);
+            }
+            // console.log(' \n  tag._id = > ', result.data, '\n');
+            // allTags.forEach(tag => {
+            // });
+            // console.log(' \n result.data = > ', result.data, '\n');
+        };
+    },
+    remove_childs() {
+        return async context => {
+            const child_ids = context.result.childs_id;
+            if (!child_ids.length) return;
+            const DocService = context.app.service('documents');
+            child_ids.forEach(child_id => {
+                DocService.remove(child_id);
+            });
         };
     }
 };
