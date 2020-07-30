@@ -1,6 +1,6 @@
 {
     "host": "localhost",
-    "port": 3030,
+    "port": "PORT",
     "public": "../public/",
     "paginate": {
         "default": 15,
@@ -9,7 +9,7 @@
     "authentication": {
         "entity": "user",
         "service": "users",
-        "secret": "YYW9QAdJfv162EY55tlyWB/rqEk=",
+        "secret": "AUTH_SECRET",
         "authStrategies": [
             "jwt",
             "local"
@@ -18,7 +18,7 @@
             "header": {
                 "typ": "access"
             },
-            "audience": "https://yourdomain.com",
+            "audience": "DOMAIN",
             "issuer": "feathers",
             "algorithm": "HS256",
             "expiresIn": "1d"

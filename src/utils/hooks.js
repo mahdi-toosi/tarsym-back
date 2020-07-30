@@ -15,6 +15,9 @@ module.exports = {
     get_new_tags() {
         return context => {
             let allTags = context.data.tags;
+            if (!allTags) return context;
+
+            // console.log('allTags => ', allTags);
             const get_new_tags = allTags.filter(el => !el._id);
             get_new_tags.forEach(el => {
                 newTags.push(el);
@@ -35,7 +38,7 @@ module.exports = {
     },
     set_new_tags() {
         return context => {
-            if (newTags.length == 0) return context;
+            if (!newTags.length) return context;
 
             const doc_id = context.result._id;
             const TagsService = context.app.service('tags');

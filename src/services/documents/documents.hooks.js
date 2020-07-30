@@ -19,7 +19,12 @@ module.exports = {
         create: [ // JSON_pars_data(),
             get_new_tags()
         ],
-        update: [],
+        update: [
+            ctx => {
+                console.log('\n\n ####### UPDATEEE ######## \n\n');
+                return ctx;
+            }
+        ],
         patch: [],
         remove: []
     },

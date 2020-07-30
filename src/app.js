@@ -4,6 +4,8 @@ const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
 const logger = require('./logger');
+const dotenv = require('dotenv');
+dotenv.config();
 
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -62,6 +64,7 @@ app.use(
         logger,
         html: {
             404: path.join(app.get('public'), '404.html'),
+            401: path.join(app.get('public'), '../resources/views/login.html'),
         }
     })
 );
