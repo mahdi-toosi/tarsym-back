@@ -1,8 +1,8 @@
 // eslint-disable-next-line no-unused-vars
 const Docs = require('../services/documents/documents.class');
-const {
-    authenticate
-} = require('@feathersjs/express');
+// const {
+//     authenticate
+// } = require('@feathersjs/express');
 
 module.exports = function (app) {
     // Add your custom middleware here. Remember that
@@ -16,22 +16,22 @@ module.exports = function (app) {
 
     // general routes
     app.get('/', renderApp);
-    app.get('/create/doc/:id', authenticate('local'), renderApp);
-    app.get('/update/doc/:id', authenticate('local'), renderApp);
-    app.get('/my-docs', authenticate('local'), renderApp);
-    app.get('/signup', sendThisFile('signup'));
-    app.get('/login', sendThisFile('login'));
+    app.get('/create/doc/:id', renderApp);
+    app.get('/update/doc/:id', renderApp);
+    app.get('/my-docs', renderApp);
+    app.get('/signup', renderApp);
+    app.get('/login', renderApp);
 };
 
 const path = require('path');
 const renderApp = (req, res) => {
-    const {
-        user
-    } = req;
-    console.log('\n user #### => ', user);
+    // const {
+    //     user
+    // } = req;
+    // console.log('\n user #### => ', user);
 
     try {
-        console.log('\n req #### => ', req.feathers);
+        // console.log('\n req #### => ', req.feathers);
         // if (req.feathers.user) 
         res.sendFile(path.join(__dirname + '../../../resources/views/index.html'));
         // else res.redirect('/login');
@@ -40,12 +40,12 @@ const renderApp = (req, res) => {
     }
 };
 
-function sendThisFile(file) {
-    return (req, res) => {
-        try {
-            res.sendFile(path.join(__dirname + `../../../resources/views/${file}.html`));
-        } catch (error) {
-            console.log(error);
-        }
-    };
-}
+// function sendThisFile(file) {
+//     return (req, res) => {
+//         try {
+//             res.sendFile(path.join(__dirname + `../../../resources/views/${file}.html`));
+//         } catch (error) {
+//             console.log(error);
+//         }
+//     };
+// }

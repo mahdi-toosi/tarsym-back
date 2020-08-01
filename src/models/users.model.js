@@ -9,8 +9,9 @@ module.exports = function (app) {
 
         email: {
             type: String,
-            unique: true,
-            lowercase: true
+            lowercase: true,
+            // required: [true, 'ایمیل را وارد کنید'],
+            // unique: [true, 'با این ایمیل قبلا ثبت نام کرده اند'],
         },
         password: {
             type: String

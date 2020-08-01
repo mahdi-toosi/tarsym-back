@@ -29,11 +29,6 @@
         },
         "oauth": {
             "redirect": "/",
-            "auth0": {
-                "key": "<auth0 oauth key>",
-                "secret": "<auth0 oauth secret>",
-                "subdomain": "<auth0 subdomain>"
-            },
             "google": {
                 "key": "<google oauth key>",
                 "secret": "<google oauth secret>",
@@ -45,5 +40,5 @@
             }
         }
     },
-    "mongodb": "mongodb://localhost:27017/tarsymDB"
+    "mongodb": "MONGODB_ADDRESS"
 }
