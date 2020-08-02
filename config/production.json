@@ -1,4 +1,5 @@
 {
-    "host": "tarsym-back-app.feathersjs.com",
-    "port": "PORT"
+    "host": "P_DOMAIN",
+    "port": "PORT",
+    "mongodb": "P_MONGODB_ADDRESS"
 }
