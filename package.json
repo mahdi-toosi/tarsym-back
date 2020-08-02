@@ -56,16 +56,12 @@
         "helmet": "^3.23.3",
         "mongodb-core": "^3.2.7",
         "mongoose": "^5.9.21",
-        "pug": "^2.0.4",
         "serve-favicon": "^2.5.0",
         "winston": "^3.3.3"
     },
     "devDependencies": {
         "eslint": "^6.8.0",
         "nodemon": "^2.0.4",
-        "laravel-mix": "^5.0.4",
-        "stylus": "^0.54.7",
-        "stylus-loader": "^3.0.2",
         "@babel/plugin-proposal-class-properties": "^7.8.3"
     }
 }
