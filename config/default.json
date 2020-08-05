@@ -3,7 +3,7 @@
     "port": "PORT",
     "public": "../public/dist",
     "paginate": {
-        "default": 15,
+        "default": 30,
         "max": 50
     },
     "authentication": {
