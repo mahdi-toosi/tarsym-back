@@ -1,6 +1,6 @@
-// const {
-//     authenticate
-// } = require('@feathersjs/authentication').hooks;
+const {
+    authenticate
+} = require('@feathersjs/authentication').hooks;
 const {
     // JSON_pars_data,
     get_new_tags,
@@ -12,7 +12,7 @@ const {
 module.exports = {
     before: {
         all: [
-            // authenticate('jwt')
+            authenticate('jwt')
         ],
         find: [],
         get: [],
