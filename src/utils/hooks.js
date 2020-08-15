@@ -8,7 +8,7 @@ module.exports = {
                 context.data = json_data;
                 return context;
             } catch (error) {
-                console.log(' \n ###### document create hook log => => => \n ', error);
+                console.log(' \n JSON_pars_data => \n ', error);
             }
         };
     },
@@ -93,22 +93,44 @@ module.exports = {
                     }
                 }
             } catch (error) {
-                console.log(error);
+                console.log('\n populate_tags => ', error);
             }
-            // console.log(' \n  tag._id = > ', result.data, '\n');
-            // allTags.forEach(tag => {
-            // });
-            // console.log(' \n result.data = > ', result.data, '\n');
         };
     },
     remove_childs() {
         return async context => {
             const child_ids = context.result.childs_id;
+            // TODO remove the doc if , the doc has no father
             if (!child_ids.length) return;
-            const DocService = context.app.service('documents');
-            child_ids.forEach(child_id => {
-                DocService.remove(child_id);
-            });
+            try {
+                const DocService = context.app.service('documents');
+                child_ids.forEach(child_id => {
+                    DocService.remove(child_id);
+                });
+            } catch (error) {
+                console.log('\n remove_childs => ', error);
+            }
+        };
+    },
+    remove_useless_fields() {
+        return async context => {
+            const response = context.result,
+                fields = ['title_fuzzy', 'excerpt_fuzzy', '__v', 'createdAt', 'updatedAt'];
+            try {
+                if (response.data) {
+                    response.data.forEach(data => {
+                        fields.forEach(field => {
+                            delete data[field];
+                        });
+                    });
+                } else {
+                    fields.forEach(field => {
+                        delete response[field];
+                    });
+                }
+            } catch (error) {
+                console.log('\n remove_useless_fields => ', error);
+            }
         };
     }
 };

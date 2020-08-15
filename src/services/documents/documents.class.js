@@ -20,6 +20,24 @@ exports.create_realationships = async (req, res) => {
             message: 'realationships created'
         });
     } catch (error) {
-        console.log(error);
+        console.log('\n create_realationships => ', error);
+    }
+};
+
+exports.search_in_docs = async (req, res) => {
+    // console.log('\n req => ', req, '\n');
+    const docService = req.app.service('documents'),
+        text = req.params.text,
+        forLayers = req.query.forLayers;
+    let search = [];
+    try {
+        if (forLayers) {
+            search = await docService.Model.fuzzySearch(text).select('_id title excerpt');
+        } else {
+            search = await docService.Model.fuzzySearch(text);
+        }
+        res.status(200).send(search);
+    } catch (error) {
+        console.log('\n search_in_docs => ', error);
     }
 };

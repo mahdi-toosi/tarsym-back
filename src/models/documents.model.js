@@ -8,12 +8,14 @@ module.exports = function (app) {
     const {
         Schema
     } = mongooseClient;
+    const mongoose_fuzzy_searching = require('mongoose-fuzzy-searching');
+
     const schema = new Schema({
         title: {
             type: String,
             required: [true, 'به تیتر برای توضیح این مختصات نیاز است'],
         },
-        description: {
+        excerpt: {
             type: String,
             required: [true, 'به متنی برای توضیح این مختصات نیاز است'],
             // maxlength: 800
@@ -27,6 +29,9 @@ module.exports = function (app) {
                 type: [Number],
                 index: '2dsphere'
             },
+        },
+        zoom: {
+            type: Number,
         },
         // zoom: {
         //     type: Number,
@@ -74,6 +79,10 @@ module.exports = function (app) {
         // }
     }, {
         timestamps: true
+    });
+
+    schema.plugin(mongoose_fuzzy_searching, {
+        fields: ['title', 'excerpt']
     });
 
     // This is necessary to avoid model compilation errors in watch mode

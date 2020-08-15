@@ -6,7 +6,7 @@ module.exports = function (app) {
     // in Express, the order matters.
     // custom api
     app.post('/create/documents/relationship', Docs.create_realationships);
-
+    app.get('/search/:text', Docs.search_in_docs);
     // Define tempalte engine
     // app.set('view engine', 'pug');
     // app.set('views', 'resources/views/');
