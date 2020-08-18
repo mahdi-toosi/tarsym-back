@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 // documents-model.js - A mongoose model
 // 
 // See http://mongoosejs.com/docs/models.html
@@ -82,7 +83,18 @@ module.exports = function (app) {
     });
 
     schema.plugin(mongoose_fuzzy_searching, {
-        fields: ['title', 'excerpt']
+        fields: [{
+                name: 'title',
+                minSize: 4,
+                weight: 5,
+                prefixOnly: true,
+            },
+            {
+                name: 'excerpt',
+                minSize: 8,
+                prefixOnly: true,
+            }
+        ]
     });
 
     // This is necessary to avoid model compilation errors in watch mode

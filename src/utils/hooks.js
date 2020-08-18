@@ -70,26 +70,38 @@ module.exports = {
                 result
             } = context;
             let tag_ids = new Set();
-            result.data.forEach(doc => {
-                doc.tags.forEach(tag_id => {
+            if (result.data) {
+                result.data.forEach(doc => {
+                    doc.tags.forEach(tag_id => {
+                        tag_ids.add(String(tag_id));
+                    });
+                });
+            } else {
+                result.tags.forEach(tag_id => {
                     tag_ids.add(String(tag_id));
                 });
-            });
+            }
             const getTags = await app.service('tags').find({
                 query: {
                     _id: {
-                        $in: [...tag_ids]
-                    }
+                        $in: [...tag_ids],
+                    },
+                    $select: ['_id', 'name']
                 }
             });
-
             try {
-                for (let index = 0; index < result.data.length; index++) {
-                    const doc = result.data[index];
-                    for (let index = 0; index < doc.tags.length; index++) {
-                        const tag_ID = doc.tags[index];
-                        const tag = getTags.data.filter(tag => String(tag._id) == String(tag_ID))[0];
-                        doc.tags[index] = tag;
+                if (result.data) {
+                    result.data.forEach(doc => {
+                        for (let index = 0; index < doc.tags.length; index++) {
+                            const tag_ID = doc.tags[index];
+                            const tag = getTags.data.filter(tag => String(tag._id) == String(tag_ID))[0];
+                            doc.tags[index] = tag;
+                        }
+                    });
+                } else {
+                    for (let index = 0; index < result.tags.length; index++) {
+                        const tag = getTags.data.filter(tag => String(tag._id) == String(result.tags[index]))[0];
+                        result.tags[index] = tag;
                     }
                 }
             } catch (error) {

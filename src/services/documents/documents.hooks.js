@@ -27,8 +27,8 @@ module.exports = {
 
     after: {
         all: [remove_useless_fields()],
-        find: [populate_tags(), ],
-        get: [populate_tags(), ],
+        find: [populate_tags()],
+        get: [populate_tags()],
         create: [set_new_tags()],
         update: [],
         patch: [],
