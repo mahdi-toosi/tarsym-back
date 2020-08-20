@@ -34,14 +34,14 @@ module.exports = function (app) {
         zoom: {
             type: Number,
         },
-        // zoom: {
-        //     type: Number,
-        //     required: true
-        // },
         tags: [{
             type: Schema.Types.ObjectId,
-            ref: 'Tag',
+            ref: 'taxonomies',
             // required: [true, 'برای سرچ بهتر کاربر ثبت حداقل یک تگ نیاز است'],
+        }],
+        categorys: [{
+            type: Schema.Types.ObjectId,
+            ref: 'taxonomies',
         }],
         date: {
             type: Number,
@@ -52,9 +52,6 @@ module.exports = function (app) {
             required: true
         },
         root: {
-            // type: Schema.Types.ObjectId,
-            // ref: 'documents',
-            // required: true
             type: Boolean,
         },
         childs_id: {
