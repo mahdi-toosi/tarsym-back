@@ -112,3 +112,4 @@ data/
 public/dist
 # .ENV
 .env
+tarsym-back.zip
