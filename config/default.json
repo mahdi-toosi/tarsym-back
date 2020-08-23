@@ -1,6 +1,6 @@
 {
     "host": "localhost",
-    "port": "PORT",
+    "port": "2345",
     "public": "../public/dist",
     "paginate": {
         "default": 30,
@@ -9,7 +9,7 @@
     "authentication": {
         "entity": "user",
         "service": "users",
-        "secret": "AUTH_SECRET",
+        "secret": "07GTOBkvmDWzNZS0HExP+Lv7Qf0=",
         "authStrategies": [
             "jwt",
             "local"
@@ -18,7 +18,7 @@
             "header": {
                 "typ": "access"
             },
-            "audience": "DOMAIN",
+            "audience": "http://yourdomain.com",
             "issuer": "feathers",
             "algorithm": "HS256",
             "expiresIn": "1d"
@@ -40,5 +40,5 @@
             }
         }
     },
-    "mongodb": "MONGODB_ADDRESS"
+    "mongodb": "mongodb://localhost:27017/tarsymDB"
 }

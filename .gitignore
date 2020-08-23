@@ -110,6 +110,6 @@ $RECYCLE.BIN/
 lib/
 data/
 public/dist
-# .ENV
-.env
+.ENV
 tarsym-back.zip
+config/default-production.json

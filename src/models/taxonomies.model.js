@@ -14,7 +14,7 @@ module.exports = function (app) {
             required: true,
             unique: true
         },
-        //*    categorys type = 1 / tags type = 2
+        //*    categories type = 1 / tags type = 2
         type: {
             type: Number,
             required: true,
