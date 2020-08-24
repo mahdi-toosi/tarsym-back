@@ -39,7 +39,7 @@ module.exports = function (app) {
             ref: 'taxonomies',
             // required: [true, 'برای سرچ بهتر کاربر ثبت حداقل یک تگ نیاز است'],
         }],
-        categorys: [{
+        categories: [{
             type: Schema.Types.ObjectId,
             ref: 'taxonomies',
         }],

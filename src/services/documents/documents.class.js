@@ -32,9 +32,9 @@ exports.search_in_docs = async (req, res) => {
     let search = [];
     try {
         if (forLayers) {
-            search = await docService.Model.fuzzySearch(text).select('_id title excerpt');
+            search = await docService.Model.fuzzySearch(text).select('_id title excerpt').exec();
         } else {
-            search = await docService.Model.fuzzySearch(text);
+            search = await docService.Model.fuzzySearch(text).exec();
         }
         res.status(200).send(search);
     } catch (error) {
