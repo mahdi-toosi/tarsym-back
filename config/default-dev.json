@@ -1,0 +1,44 @@
+{
+    "host": "dev.tarsym.ir",
+    "port": "2348",
+    "public": "../public/dist",
+    "paginate": {
+        "default": 30,
+        "max": 50
+    },
+    "authentication": {
+        "entity": "user",
+        "service": "users",
+        "secret": "07MTOYtvmDWzGZ0HExXPL+v7Qf0=",
+        "authStrategies": [
+            "jwt",
+            "local"
+        ],
+        "jwtOptions": {
+            "header": {
+                "typ": "access"
+            },
+            "audience": "https://dev.tarsym.ir",
+            "issuer": "feathers",
+            "algorithm": "HS256",
+            "expiresIn": "1d"
+        },
+        "local": {
+            "usernameField": "email",
+            "passwordField": "password"
+        },
+        "oauth": {
+            "redirect": "/",
+            "google": {
+                "key": "<google oauth key>",
+                "secret": "<google oauth secret>",
+                "scope": [
+                    "email",
+                    "profile",
+                    "openid"
+                ]
+            }
+        }
+    },
+    "mongodb": "mongodb://tarsymir_dev:JVNZ6CK3UGwQp7t@localhost:27017/tarsymir_dev"
+}

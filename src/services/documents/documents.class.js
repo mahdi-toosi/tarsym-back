@@ -25,19 +25,53 @@ exports.create_realationships = async (req, res) => {
 };
 
 exports.search_in_docs = async (req, res) => {
-    // console.log('\n req => ', req, '\n');
-    const docService = req.app.service('documents'),
-        text = req.params.text,
+    const docModel = req.app.service('documents').Model,
+        SearchedText = req.query.text,
         forLayers = req.query.forLayers;
     let search = [];
     try {
         if (forLayers) {
-            search = await docService.Model.fuzzySearch(text).select('_id title excerpt').exec();
-        } else {
-            search = await docService.Model.fuzzySearch(text).exec();
+            search = await docModel.fuzzySearch(SearchedText).select('_id title excerpt').exec();
+            res.status(200).send(search);
+            return;
         }
+        const Query = {};
+        let area = req.query.area;
+        if (area && area.length > 5) {
+            let validArea = [];
+            for (let index = 0; index < area.length; index += 2) {
+                const coor = area[index];
+                const Nextcoor = area[index + 1];
+                const coordinates = [Number(coor), Number(Nextcoor)];
+                validArea.push(coordinates);
+            }
+            validArea.push(validArea[0]);
+            Query.coordinates = {
+                $geoWithin: {
+                    $geometry: {
+                        type: 'Polygon',
+                        coordinates: [
+                            [
+                                ...validArea
+                            ]
+                        ]
+                    }
+                }
+            };
+        }
+
+        if (SearchedText) search = await docModel.fuzzySearch(SearchedText, Query)
+            .select('-createdAt -updatedAt -excerpt_fuzzy -title_fuzzy -__v')
+            .exec();
+        else search = await docModel.find(Query)
+            .select('-createdAt -updatedAt -excerpt_fuzzy -title_fuzzy -__v')
+            .exec();
         res.status(200).send(search);
     } catch (error) {
-        console.log('\n search_in_docs => ', error);
+        if (error.codeName == 'BadValue' && error.code == 2)
+            res.status(415).send({
+                error: 'Mongo Error: area coordinates is not valid'
+            });
+        else console.log('\n search_in_docs => ', error.codeName);
     }
 };
