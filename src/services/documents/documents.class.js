@@ -46,7 +46,7 @@ exports.search_in_docs = async (req, res) => {
                 validArea.push(coordinates);
             }
             validArea.push(validArea[0]);
-            Query.coordinates = {
+            Query.location = {
                 $geoWithin: {
                     $geometry: {
                         type: 'Polygon',

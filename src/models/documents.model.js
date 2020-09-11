@@ -21,7 +21,7 @@ module.exports = function (app) {
             required: [true, 'به متنی برای توضیح این مختصات نیاز است'],
             // maxlength: 800
         },
-        coordinates: {
+        location: {
             type: {
                 type: String,
                 enum: ['Point'],
@@ -31,7 +31,7 @@ module.exports = function (app) {
                 index: '2dsphere'
             },
         },
-        zoom: {
+        zoomLevel: {
             type: Number,
         },
         tags: [{
@@ -56,25 +56,25 @@ module.exports = function (app) {
         },
         childs_id: {
             type: Array,
+        },
+        user: {
+            id: {
+                type: Schema.Types.ObjectId,
+                ref: 'User',
+            },
+            // name: {
+            //     type: String,
+            // },
+            // image: {
+            //     type: String,
+            // },
+            rol: {
+                type: Number,
+            },
+            // situation: {
+            //     type: String,
+            // },
         }
-        // user: {
-        //     id: {
-        //         type: Schema.Types.ObjectId,
-        //         ref: 'User',
-        //     },
-        //     name: {
-        //         type: String,
-        //     },
-        //     image: {
-        //         type: String,
-        //     },
-        //     rol: {
-        //         type: Number,
-        //     },
-        //     situation: {
-        //         type: String,
-        //     },
-        // }
     }, {
         timestamps: true
     });
@@ -89,6 +89,7 @@ module.exports = function (app) {
             {
                 name: 'excerpt',
                 minSize: 8,
+                weight: 10,
                 prefixOnly: true,
             }
         ]
