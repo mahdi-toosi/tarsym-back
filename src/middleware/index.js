@@ -23,7 +23,7 @@ module.exports = function (app) {
     app.get('*', (req, res) => {
         try {
             // res.sendFile(path.join(__dirname + '../../../resources/views/index.html'));
-            res.sendFile(path.join(app.get('public'), 'index.html'));
+            res.sendFile(path.join(app.get('public'), 'dist/index.html'));
         } catch (error) {
             console.log(error);
         }
