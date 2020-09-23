@@ -1,6 +1,7 @@
 const {
     authenticate
 } = require('@feathersjs/authentication').hooks;
+
 const {
     // JSON_pars_data,
     before_taxonomies_hook,
@@ -10,15 +11,19 @@ const {
     remove_useless_fields
 } = require('../../utils/hooks');
 
+const {
+    checkForValidRole
+} = require('../../hooks/check-role');
+
 module.exports = {
     before: {
         all: [authenticate('jwt')],
         find: [],
         get: [],
-        create: [before_taxonomies_hook()],
-        update: [before_taxonomies_hook()],
-        patch: [before_taxonomies_hook()],
-        remove: []
+        create: [checkForValidRole(process.env['URoleDrawer']), before_taxonomies_hook()],
+        update: [checkForValidRole(process.env['URoleDrawer']), before_taxonomies_hook()],
+        patch: [checkForValidRole(process.env['URoleDrawer']), before_taxonomies_hook()],
+        remove: [checkForValidRole(process.env['URoleDrawer'])]
     },
 
     after: {

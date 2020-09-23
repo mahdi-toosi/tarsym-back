@@ -2,26 +2,27 @@
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
+
 module.exports = function (app) {
     const modelName = 'users';
     const mongooseClient = app.get('mongooseClient');
     const schema = new mongooseClient.Schema({
-
         email: {
             type: String,
             lowercase: true,
             // required: [true, 'ایمیل را وارد کنید'],
-            // unique: [true, 'با این ایمیل قبلا ثبت نام کرده اند'],
+            unique: [true, 'با این ایمیل قبلا ثبت نام کرده اند'],
         },
         password: {
             type: String
         },
-
-
+        role: {
+            type: Number,
+            default: process.env['URoleUser']
+        },
         auth0Id: {
             type: String
         },
-
         googleId: {
             type: String
         },

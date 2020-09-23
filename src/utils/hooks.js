@@ -50,7 +50,7 @@ module.exports = {
                 for (let index = 0; index < newTags.length; index++) {
                     const tag = newTags[index];
                     tag.documents = [doc_id];
-                    const createdTag = await TaxonomiesService.create(tag);
+                    const createdTag = await TaxonomiesService.create(tag, context.params);
                     createdTag_ids.push(createdTag._id);
                 }
                 // TODO => how can i pass updated tag filed to user ? look at next line ! doesnt work !
@@ -73,8 +73,11 @@ module.exports = {
         return async context => {
             if (!categories_list.length) return context;
             let cat_rels_list = [];
-            const result = context.result,
-                TaxonomiesService = context.app.service('taxonomies'),
+            const {
+                result,
+                params
+            } = context;
+            const TaxonomiesService = context.app.service('taxonomies'),
                 DocumentsService = context.app.service('documents');
             try {
                 for (let index = 0; index < categories_list.length; index++) {
@@ -84,7 +87,7 @@ module.exports = {
                         continue;
                     }
                     category.documents = [result._id];
-                    const newCat = await TaxonomiesService.create(category);
+                    const newCat = await TaxonomiesService.create(category, params);
                     cat_rels_list.push(newCat);
                 }
                 // * update realationships
@@ -98,7 +101,7 @@ module.exports = {
                             childs: [child_cat._id],
                             documents: [result._id]
                         }
-                    });
+                    }, params);
                 }
 
                 if (!cat_rels_list.length) {
@@ -110,7 +113,7 @@ module.exports = {
                     _id: result._id
                 }, {
                     categories: last_category_id
-                }).exec();
+                }, params).exec();
                 result.categories = last_category_id;
 
                 categories_list = [];
@@ -127,7 +130,10 @@ module.exports = {
             if (!child_ids.length) return context;
             try {
                 const DocService = context.app.service('documents');
-                child_ids.forEach(child_id => DocService.remove(child_id));
+                for (let index = 0; index < child_ids.length; index++) {
+                    const child_id = child_ids[index];
+                    await DocService.remove(child_id, context.params);
+                }
                 return context;
             } catch (error) {
                 console.log('\n remove_childs => ', error);

@@ -1,4 +1,10 @@
 const {
+    usersCheckRoleBeforeCreate,
+    usersCheckRoleBeforeUpdate,
+    checkForValidRole
+} = require('../../hooks/check-role');
+
+const {
     authenticate
 } = require('@feathersjs/authentication').hooks;
 
@@ -12,10 +18,10 @@ module.exports = {
         all: [],
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
-        create: [hashPassword('password')],
-        update: [hashPassword('password'), authenticate('jwt')],
-        patch: [hashPassword('password'), authenticate('jwt')],
-        remove: [authenticate('jwt')]
+        create: [usersCheckRoleBeforeCreate(), hashPassword('password')],
+        update: [hashPassword('password'), authenticate('jwt'), usersCheckRoleBeforeUpdate()],
+        patch: [hashPassword('password'), authenticate('jwt'), usersCheckRoleBeforeUpdate()],
+        remove: [authenticate('jwt'), checkForValidRole(process.env['URoleAdmin'])]
     },
 
     after: {

@@ -22,11 +22,11 @@ module.exports = function (app) {
     // general routes
     app.get('*', (req, res) => {
         try {
+            console.log('\n app sended ,,,');
             // res.sendFile(path.join(__dirname + '../../../resources/views/index.html'));
             res.sendFile(path.join(app.get('public'), 'dist/index.html'));
         } catch (error) {
             console.log(error);
         }
     });
-
 };

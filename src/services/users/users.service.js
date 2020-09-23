@@ -6,6 +6,12 @@ const createModel = require('../../models/users.model');
 const hooks = require('./users.hooks');
 
 module.exports = function (app) {
+    // * initial user roles
+    process.env['URoleAdmin'] = 48;
+    process.env['URoleDrawer'] = 35;
+    process.env['URoleUser'] = 3;
+    process.env['URoleSuspension'] = 1;
+
     const options = {
         Model: createModel(app),
         paginate: app.get('paginate')
