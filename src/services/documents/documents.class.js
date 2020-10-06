@@ -6,21 +6,25 @@ exports.Documents = class Documents extends Service {
 
 };
 
-exports.create_realationships = async (req, res) => {
-    const docService = req.app.service('documents');
+exports.create_relationships = async (req, res) => {
+    const docsModel = req.app.service('documents').Model;
     const list = req.body;
     try {
         for (let i = 0; i < list.length; i++) {
             const doc = list[i];
-            await docService.patch(doc.new_id, {
-                childs_id: [...doc.childs]
-            }, );
+            await docsModel.findByIdAndUpdate({
+                _id: doc.new_id
+            }, {
+                $addToSet: {
+                    childs_id: [...doc.childs]
+                }
+            }).exec();
         }
         res.status(201).send({
-            message: 'realationships created'
+            message: 'relationships created'
         });
     } catch (error) {
-        console.log('\n create_realationships => ', error);
+        console.log('\n create_relationships => ', error);
     }
 };
 

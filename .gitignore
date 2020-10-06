@@ -110,6 +110,7 @@ $RECYCLE.BIN/
 lib/
 data/
 
+test
 public/dist/
 public/UPLOADS/images/
 

@@ -90,7 +90,7 @@ module.exports = {
                     const newCat = await TaxonomiesService.create(category, params);
                     cat_rels_list.push(newCat);
                 }
-                // * update realationships
+                // * update relationships
                 for (let index = 0; index < cat_rels_list.length; index++) {
                     const cat = cat_rels_list[index];
                     const child_cat = cat_rels_list[index + 1];
@@ -152,9 +152,78 @@ module.exports = {
                 } else {
                     fields.forEach(field_name => delete response[field_name]);
                 }
+                return context;
             } catch (error) {
                 console.log('\n remove_useless_fields => ', error);
             }
         };
-    }
+    },
+
+    transferTheDocs_categories() {
+        return async context => {
+            const old_cat = context.result;
+            // * if taxonomy is tag escape
+            if (old_cat.type == 2) return context;
+
+            // * set edits for father
+            const edits = {
+                $pull: {
+                    childs: old_cat._id
+                }
+            };
+            if (old_cat.documents.length) {
+                edits.$push = {
+                    documents: {
+                        $each: old_cat.documents
+                    }
+                };
+            }
+            const TaxServiceModel = context.app.service('taxonomies').Model;
+            try {
+                // * transfer The Docs to father
+                let update_father = await TaxServiceModel.findOneAndUpdate({
+                    childs: old_cat._id,
+                    type: 1
+                }, edits);
+
+                if (!update_father) {
+                    // * find one or create
+                    update_father = await TaxServiceModel.findOneAndUpdate({
+                        name: 'بدون دسته بندی'
+                    }, {
+                        $push: {
+                            documents: {
+                                $each: old_cat.documents
+                            }
+                        }
+                    });
+                    if (!update_father) {
+                        update_father = await TaxServiceModel.create({
+                            name: 'بدون دسته بندی',
+                            type: 1,
+                            documents: old_cat.documents
+                        });
+                    }
+                }
+                // * update documents categories
+                const DosServiceModel = context.app.service('documents').Model;
+                await DosServiceModel.updateMany({
+                    categories: old_cat._id
+                }, {
+                    categories: [update_father._id]
+                });
+            } catch (error) {
+                console.log('\n transferTheDocs => ', error);
+            }
+            return context;
+        };
+    },
+    transferTheDocs_tags() {
+        return async context => {
+            const old_tag = context.result;
+            // * if taxonomy is category escape
+            if (old_tag.type == 1) return context;
+            // TODO => find every doc that has this tag , and remove tag from it  ...
+        };
+    },
 };

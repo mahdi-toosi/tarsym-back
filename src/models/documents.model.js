@@ -60,7 +60,7 @@ module.exports = function (app) {
         user: {
             id: {
                 type: Schema.Types.ObjectId,
-                ref: 'User',
+                ref: 'users',
             },
             // name: {
             //     type: String,

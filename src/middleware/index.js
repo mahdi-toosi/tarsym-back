@@ -11,9 +11,19 @@ module.exports = function (app) {
     // Add your custom middleware here. Remember that
     // in Express, the order matters.
     // custom api
-    app.post('/create/documents/relationship', Docs.create_realationships);
-    app.get('/searchInDocs', Docs.search_in_docs);
-    app.post('/upload-images', authenticate('jwt'), UploadImage.storeWithMulter(), UploadImage.responseToClient());
+    app.post('/create/documents/relationship',
+        Docs.create_relationships
+    );
+
+    app.get('/searchInDocs',
+        Docs.search_in_docs
+    ); // TODO => is it need to check auth and role ?
+
+    app.post('/upload-images',
+        authenticate('jwt'),
+        UploadImage.storeWithMulter(),
+        UploadImage.responseToClient()
+    );
 
     // Define tempalte engine
     // app.set('view engine', 'pug');

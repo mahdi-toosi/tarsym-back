@@ -6,6 +6,11 @@ const {
     checkForValidRole
 } = require('../../hooks/check-role');
 
+const {
+    transferTheDocs_categories,
+    transferTheDocs_tags
+} = require('../../utils/hooks');
+
 module.exports = {
     before: {
         all: [],
@@ -24,7 +29,7 @@ module.exports = {
         create: [],
         update: [],
         patch: [],
-        remove: []
+        remove: [transferTheDocs_categories(), transferTheDocs_tags()]
     },
 
     error: {

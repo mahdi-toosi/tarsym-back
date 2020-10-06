@@ -18,9 +18,20 @@ module.exports = {
         all: [],
         find: [authenticate('jwt')],
         get: [authenticate('jwt')],
-        create: [usersCheckRoleBeforeCreate(), hashPassword('password')],
-        update: [hashPassword('password'), authenticate('jwt'), usersCheckRoleBeforeUpdate()],
-        patch: [hashPassword('password'), authenticate('jwt'), usersCheckRoleBeforeUpdate()],
+        create: [
+            usersCheckRoleBeforeCreate(),
+            hashPassword('password')
+        ],
+        update: [
+            hashPassword('password'),
+            authenticate('jwt'),
+            usersCheckRoleBeforeUpdate()
+        ],
+        patch: [
+            hashPassword('password'),
+            authenticate('jwt'),
+            usersCheckRoleBeforeUpdate()
+        ],
         remove: [authenticate('jwt'), checkForValidRole(process.env['URoleAdmin'])]
     },
 
