@@ -3,6 +3,7 @@ const favicon = require('serve-favicon');
 const compress = require('compression');
 const helmet = require('helmet');
 const cors = require('cors');
+const morgan = require('morgan');
 const logger = require('./logger');
 const feathers = require('@feathersjs/feathers');
 const configuration = require('@feathersjs/configuration');
@@ -37,6 +38,9 @@ app.configure(services);
 app.configure(authentication);
 
 //* Configure other middleware (see `middleware/index.js`)
+app.use(morgan('tiny', {
+    stream: logger.stream
+}));
 app.configure(middleware);
 app.use(express.notFound());
 app.use(
