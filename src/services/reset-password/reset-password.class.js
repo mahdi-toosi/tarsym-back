@@ -1,7 +1,3 @@
-const {
-    Service
-} = require('feathers-mongoose');
+const { Service } = require("feathers-mongoose");
 
-exports.ResetPassword = class ResetPassword extends Service {
-
-};
+exports.ResetPassword = class ResetPassword extends Service {};

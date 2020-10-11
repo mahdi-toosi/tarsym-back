@@ -1,25 +1,33 @@
-const {
-    authenticate
-} = require('@feathersjs/authentication').hooks;
+const { authenticate } = require("@feathersjs/authentication").hooks;
 
-const {
-    checkForValidRole
-} = require('../../hooks/check-role');
+const { checkForValidRole } = require("../../hooks/check-role");
 
 const {
     transferTheDocs_categories,
-    transferTheDocs_tags
-} = require('../../utils/hooks');
+    transferTheDocs_tags,
+} = require("../../utils/hooks");
 
 module.exports = {
     before: {
         all: [],
         find: [],
         get: [],
-        create: [authenticate('jwt'), checkForValidRole(process.env['URoleDrawer'])],
-        update: [authenticate('jwt'), checkForValidRole(process.env['URoleDrawer'])],
-        patch: [authenticate('jwt'), checkForValidRole(process.env['URoleDrawer'])],
-        remove: [authenticate('jwt'), checkForValidRole(process.env['URoleDrawer'])]
+        create: [
+            authenticate("jwt"),
+            checkForValidRole(process.env["URoleDrawer"]),
+        ],
+        update: [
+            authenticate("jwt"),
+            checkForValidRole(process.env["URoleDrawer"]),
+        ],
+        patch: [
+            authenticate("jwt"),
+            checkForValidRole(process.env["URoleDrawer"]),
+        ],
+        remove: [
+            authenticate("jwt"),
+            checkForValidRole(process.env["URoleDrawer"]),
+        ],
     },
 
     after: {
@@ -29,7 +37,7 @@ module.exports = {
         create: [],
         update: [],
         patch: [],
-        remove: [transferTheDocs_categories(), transferTheDocs_tags()]
+        remove: [transferTheDocs_categories(), transferTheDocs_tags()],
     },
 
     error: {
@@ -39,6 +47,6 @@ module.exports = {
         create: [],
         update: [],
         patch: [],
-        remove: []
-    }
+        remove: [],
+    },
 };

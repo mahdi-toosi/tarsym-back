@@ -1,17 +1,13 @@
-const {
-    createLogger,
-    format,
-    transports
-} = require('winston');
-const fs = require('fs');
-const path = require('path');
-require('winston-daily-rotate-file');
+const { createLogger, format, transports } = require("winston");
+const fs = require("fs");
+const path = require("path");
+require("winston-daily-rotate-file");
 
-const logDir = 'logs',
+const logDir = "logs",
     datePatternConfiguration = {
-        default: 'YYYY-MM-DD',
-        everHour: 'YYYY-MM-DD-HH',
-        everMinute: 'YYYY-MM-DD-THH-mm',
+        default: "YYYY-MM-DD",
+        everHour: "YYYY-MM-DD-HH",
+        everMinute: "YYYY-MM-DD-THH-mm",
     },
     numberOfDaysToKeepLog = 30,
     fileSizeToRotate = 1; // in megabyte
@@ -26,12 +22,12 @@ const dailyRotateFileTransport = new transports.DailyRotateFile({
     datePattern: datePatternConfiguration.everHour,
     zippedArchive: true,
     maxSize: `${fileSizeToRotate}m`,
-    maxFiles: `${numberOfDaysToKeepLog}d`
+    maxFiles: `${numberOfDaysToKeepLog}d`,
 });
 
 const logger = createLogger({
     // To see more detailed errors, change this to 'debug'
-    level: 'info',
+    level: "info",
     handleExceptions: true,
     // format: format.combine(
     //     format.splat(),
@@ -39,25 +35,31 @@ const logger = createLogger({
     // ),
     format: format.combine(
         format.label({
-            label: path.basename(module.parent.filename)
+            label: path.basename(module.parent.filename),
         }),
         format.timestamp({
-            format: 'YYYY-MM-DD HH:mm:ss',
+            format: "YYYY-MM-DD HH:mm:ss",
         }),
-        format.printf(info => `${info.timestamp}[${info.label}] ${info.level}: ${JSON.stringify(info.message)}`),
+        format.printf(
+            (info) =>
+                `${info.timestamp}[${info.label}] ${
+                    info.level
+                }: ${JSON.stringify(info.message)}`
+        )
     ),
     transports: [
         new transports.Console({
-            level: 'info',
+            level: "info",
             handleExceptions: true,
             format: format.combine(
                 format.label({
-                    label: path.basename(module.parent.filename)
+                    label: path.basename(module.parent.filename),
                 }),
                 format.colorize(),
                 format.printf(
-                    info => `${info.timestamp}[${info.label}] ${info.level}: ${info.message}`,
-                ),
+                    (info) =>
+                        `${info.timestamp}[${info.label}] ${info.level}: ${info.message}`
+                )
             ),
         }),
         dailyRotateFileTransport,

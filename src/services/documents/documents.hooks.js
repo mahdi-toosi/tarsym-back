@@ -1,6 +1,4 @@
-const {
-    authenticate
-} = require('@feathersjs/authentication').hooks;
+const { authenticate } = require("@feathersjs/authentication").hooks;
 
 const {
     // JSON_pars_data,
@@ -8,22 +6,34 @@ const {
     set_new_tags,
     set_category,
     remove_childs,
-    remove_useless_fields
-} = require('../../utils/hooks');
+    remove_useless_fields,
+} = require("../../utils/hooks");
 
-const {
-    checkForValidRole
-} = require('../../hooks/check-role');
+const { checkForValidRole } = require("../../hooks/check-role");
 
 module.exports = {
     before: {
-        all: [authenticate('jwt')],
+        all: [authenticate("jwt")],
         find: [],
         get: [],
-        create: [checkForValidRole(process.env['URoleDrawer']), before_taxonomies_hook()],
-        update: [checkForValidRole(process.env['URoleDrawer']), before_taxonomies_hook()],
-        patch: [checkForValidRole(process.env['URoleDrawer']), before_taxonomies_hook()],
-        remove: [checkForValidRole(process.env['URoleDrawer'])]
+        create: [
+            checkForValidRole(process.env["URoleDrawer"]),
+            (ctx) => {
+                const user = ctx.params.user;
+                ctx.data.user = { id: user._id };
+                return ctx;
+            },
+            before_taxonomies_hook(),
+        ],
+        update: [
+            checkForValidRole(process.env["URoleDrawer"]),
+            before_taxonomies_hook(),
+        ],
+        patch: [
+            checkForValidRole(process.env["URoleDrawer"]),
+            before_taxonomies_hook(),
+        ],
+        remove: [checkForValidRole(process.env["URoleDrawer"])],
     },
 
     after: {
@@ -33,7 +43,7 @@ module.exports = {
         create: [set_new_tags(), set_category()],
         update: [set_new_tags(), set_category()],
         patch: [set_new_tags(), set_category()],
-        remove: [remove_childs()]
+        remove: [remove_childs()],
     },
 
     error: {
@@ -43,6 +53,6 @@ module.exports = {
         create: [],
         update: [],
         patch: [],
-        remove: []
-    }
+        remove: [],
+    },
 };
