@@ -9,7 +9,7 @@ const {
     remove_useless_fields,
 } = require("../../utils/hooks");
 
-const { checkForValidRole } = require("../../hooks/check-role");
+const { ValidRole } = require("../../hooks/users");
 
 module.exports = {
     before: {
@@ -17,7 +17,7 @@ module.exports = {
         find: [],
         get: [],
         create: [
-            checkForValidRole(process.env["URoleDrawer"]),
+            ValidRole(process.env["URoleDrawer"]),
             (ctx) => {
                 const user = ctx.params.user;
                 ctx.data.user = { id: user._id };
@@ -26,14 +26,14 @@ module.exports = {
             before_taxonomies_hook(),
         ],
         update: [
-            checkForValidRole(process.env["URoleDrawer"]),
+            ValidRole(process.env["URoleDrawer"]),
             before_taxonomies_hook(),
         ],
         patch: [
-            checkForValidRole(process.env["URoleDrawer"]),
+            ValidRole(process.env["URoleDrawer"]),
             before_taxonomies_hook(),
         ],
-        remove: [checkForValidRole(process.env["URoleDrawer"])],
+        remove: [ValidRole(process.env["URoleDrawer"])],
     },
 
     after: {

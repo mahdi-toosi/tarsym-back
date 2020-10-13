@@ -1,9 +1,10 @@
 const {
-    usersCheckRoleBeforeCreate,
-    usersCheckRoleBeforeUpdate,
-    checkForValidRole,
-} = require("../../hooks/check-role");
-const logger = require("../../logger");
+    RoleBeforeCreate,
+    RoleBeforeUpdate,
+    ValidResultLength,
+    ValidRole,
+    LimitQuery,
+} = require("../../hooks/users");
 
 const { authenticate } = require("@feathersjs/authentication").hooks;
 
@@ -14,46 +15,44 @@ const {
 
 module.exports = {
     before: {
-        all: [],
-        find: [authenticate("jwt")],
+        all: [
+            // (ctx) => {
+            // * check for => is user request from browser ??
+            //     if (
+            //         ctx.params.headers.origin !=
+            //         ctx.app.get("authentication").jwtOptions.audience
+            //     ) {
+            //         logger.error("Error 6585");
+            //         throw new Error("Error 6585");
+            //     }
+            //     return ctx;
+            // },
+        ],
+        find: [authenticate("jwt"), LimitQuery()],
         get: [authenticate("jwt")],
-        create: [usersCheckRoleBeforeCreate(), hashPassword("password")],
+        create: [RoleBeforeCreate(), hashPassword("password")],
         update: [
             hashPassword("password"),
             authenticate("jwt"),
-            usersCheckRoleBeforeUpdate(),
+            RoleBeforeUpdate(),
         ],
         patch: [
             hashPassword("password"),
             authenticate("jwt"),
-            usersCheckRoleBeforeUpdate(),
+            RoleBeforeUpdate(),
         ],
-        remove: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleAdmin"]),
-        ],
+        remove: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
     },
 
     after: {
         all: [
-            // Make sure the password field is never sent to the client
-            // Always must be the last hook
             protect("password"),
-        ],
-        find: [
             (ctx) => {
-                const lengthOfData = ctx.result.data.length;
-                if (lengthOfData > 2) {
-                    const user_role = ctx.params.user.role;
-                    if (user_role === process.env["URoleAdmin"]) return ctx;
-                    else {
-                        // TODO => how to log user ip address ?!
-                        logger.error("someone try to get so many users ");
-                        throw new Error("Error");
-                    }
-                }
+                delete ctx.result.limit;
+                return ctx;
             },
         ],
+        find: [ValidResultLength()],
         get: [],
         create: [],
         update: [],

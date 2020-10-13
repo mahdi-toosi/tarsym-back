@@ -18,7 +18,7 @@
             "header": {
                 "typ": "access"
             },
-            "audience": "http://yourdomain.com",
+            "audience": "http://localhost:8080",
             "issuer": "feathers",
             "algorithm": "HS256",
             "expiresIn": "1d"

@@ -1,6 +1,6 @@
 const { authenticate } = require("@feathersjs/authentication").hooks;
 
-const { checkForValidRole } = require("../../hooks/check-role");
+const { ValidRole } = require("../../hooks/users");
 
 const {
     transferTheDocs_categories,
@@ -12,22 +12,10 @@ module.exports = {
         all: [],
         find: [],
         get: [],
-        create: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleDrawer"]),
-        ],
-        update: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleDrawer"]),
-        ],
-        patch: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleDrawer"]),
-        ],
-        remove: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleDrawer"]),
-        ],
+        create: [authenticate("jwt"), ValidRole(process.env["URoleDrawer"])],
+        update: [authenticate("jwt"), ValidRole(process.env["URoleDrawer"])],
+        patch: [authenticate("jwt"), ValidRole(process.env["URoleDrawer"])],
+        remove: [authenticate("jwt"), ValidRole(process.env["URoleDrawer"])],
     },
 
     after: {

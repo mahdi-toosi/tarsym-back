@@ -2,19 +2,13 @@ const { authenticate } = require("@feathersjs/authentication").hooks;
 
 const bcrypt = require("bcryptjs");
 
-const { checkForValidRole } = require("../../hooks/check-role");
+const { ValidRole } = require("../../hooks/users");
 
 module.exports = {
     before: {
         all: [],
-        find: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleAdmin"]),
-        ],
-        get: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleAdmin"]),
-        ],
+        find: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
+        get: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
         create: [
             async (ctx) => {
                 // * find user if exist
@@ -42,14 +36,8 @@ module.exports = {
                 return ctx;
             },
         ],
-        update: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleAdmin"]),
-        ],
-        patch: [
-            authenticate("jwt"),
-            checkForValidRole(process.env["URoleAdmin"]),
-        ],
+        update: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
+        patch: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
         remove: [
             (ctx) => {
                 // * validate

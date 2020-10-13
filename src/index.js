@@ -12,4 +12,4 @@ process.on("unhandledRejection", (reason, p) =>
 const msg = `Application started on =>  http${
     host == "localhost" ? "" : "s"
 }://${host}:${port}`;
-server.on("listening", () => logger.info(msg));
+server.on("listening", () => console.log(msg));
