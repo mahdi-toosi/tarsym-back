@@ -21,17 +21,17 @@ module.exports = {
                 const usersModel = ctx.app.service("users").Model;
                 const user = await usersModel
                     .findOne({
-                        email: ctx.data.email,
+                        username: ctx.data.username,
                     })
                     .exec();
-                if (!user) throw new Error("email not found");
+                if (!user) throw new Error("username not found");
                 // * create validation number
                 const random_num = String(
                     Math.floor(100000 + Math.random() * 9000)
                 );
                 const Data = {
                     user_id: user._id,
-                    user_email: user.email,
+                    username: user.username,
                     random_num,
                 };
                 ctx.data = Data;
@@ -53,9 +53,9 @@ module.exports = {
         remove: [
             (ctx) => {
                 // * validate
-                const { user_email, random_num } = ctx.params.query;
+                const { username, random_num } = ctx.params.query;
                 const errors = [];
-                if (user_email.length < 4) errors.push("email error");
+                if (username.length < 4) errors.push("username error");
                 if (random_num.length !== 6) errors.push("code error");
                 if (errors.length) throw new Error("validation failed");
                 return ctx;
@@ -105,7 +105,7 @@ module.exports = {
                     .service("/authentication")
                     .create({
                         strategy: "local",
-                        email: UserUpdated.email,
+                        username: UserUpdated.username,
                         password,
                     });
                 // * send result without password

@@ -11,7 +11,7 @@ module.exports = function (app) {
             type: Schema.Types.ObjectId,
             ref: "users",
         },
-        user_email: {
+        username: {
             type: String,
             unique: true,
         },

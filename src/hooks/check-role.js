@@ -1,27 +1,33 @@
-// Use this hook to manipulate incoming or outgoing data.
-// For more information on hooks see: http://docs.feathersjs.com/api/hooks.html
+const logger = require("../logger");
 
 exports.usersCheckRoleBeforeCreate = () => {
-    return async (context) => {
-        if (context.data.role && context.data.role > process.env["URoleUser"])
-            throw new Error("You dont have permission");
-        else return context;
+    return async (ctx) => {
+        const dataRole = ctx.data.role;
+        if (dataRole) throw new Error("You don't have permission");
+        else return ctx;
     };
 };
 
 exports.usersCheckRoleBeforeUpdate = () => {
-    return async (context) => {
-        const validRoleForChangeRole =
-            context.params.user.role >= process.env["URoleAdmin"];
-        if (!validRoleForChangeRole) delete context.data.role;
-        return context;
+    return async (ctx) => {
+        const user = ctx.params.user;
+        if (user.role === process.env["URoleAdmin"]) return ctx;
+        if (!ctx.data._id) throw new Error("You don't have permission");
+        if (ctx.data._id != user._id) {
+            logger.error(
+                `this user => ${user._id} , try to update this user => ${ctx.data._id}`
+            );
+            throw new Error("You don't have permission");
+        }
+        delete ctx.data.role;
+        return ctx;
     };
 };
 
 exports.checkForValidRole = (validRole) => {
-    return (context) => {
-        if (context.params.user.role <= validRole)
-            throw new Error("You dont have permission");
-        else return context;
+    return (ctx) => {
+        const user_role = ctx.params.user.role;
+        if (user_role <= validRole) throw new Error("You dont have permission");
+        else return ctx;
     };
 };

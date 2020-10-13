@@ -8,25 +8,30 @@ module.exports = function (app) {
     const mongooseClient = app.get("mongooseClient");
     const schema = new mongooseClient.Schema(
         {
-            email: {
+            name: {
+                type: String,
+                required: true,
+            },
+            username: {
                 type: String,
                 lowercase: true,
-                // required: [true, 'ایمیل را وارد کنید'],
-                unique: [true, "با این ایمیل قبلا ثبت نام کرده اند"],
+                unique: true,
+                dropDups: true,
             },
             password: {
                 type: String,
+                required: true,
             },
             role: {
                 type: Number,
                 default: process.env["URoleUser"],
             },
-            auth0Id: {
-                type: String,
-            },
-            googleId: {
-                type: String,
-            },
+            // auth0Id: {
+            //     type: String,
+            // },
+            // googleId: {
+            //     type: String,
+            // },
         },
         {
             timestamps: true,
