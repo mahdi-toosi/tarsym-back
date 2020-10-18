@@ -1,23 +1,22 @@
-// reset-password-model.js - A mongoose model
+// messages-model.js - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-    const modelName = "resetPassword";
+    const modelName = "messages";
     const mongooseClient = app.get("mongooseClient");
     const { Schema } = mongooseClient;
-    const schema = new Schema({
-        user_id: { type: Schema.Types.ObjectId, ref: "users" },
-        username: { type: String, unique: true },
-        random_num: { type: String },
-        expireAt: {
-            type: Date,
-            default: Date.now,
-            index: {
-                expires: "2m",
-            },
+    const schema = new Schema(
+        {
+            members: [String],
+            lastMsgFrom: { type: String, index: true },
+            title: { type: String },
+            messages: [{ type: String }],
         },
-    });
+        {
+            timestamps: true,
+        }
+    );
 
     // This is necessary to avoid model compilation errors in watch mode
     // see https://mongoosejs.com/docs/api/connection.html#connection_Connection-deleteModel

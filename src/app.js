@@ -31,6 +31,13 @@ app.use(
 app.use(favicon(path.join(app.get("public"), "dist/new-favicon.ico")));
 app.use("/", express.static(app.get("public")));
 
+//* log all requests
+app.use(
+    morgan("tiny", {
+        stream: logger.stream,
+    })
+);
+
 //* Set up Plugins and providers
 app.configure(express.rest());
 app.configure(mongoose);
@@ -40,11 +47,6 @@ app.configure(services);
 app.configure(authentication);
 
 //* Configure other middleware (see `middleware/index.js`)
-app.use(
-    morgan("tiny", {
-        stream: logger.stream,
-    })
-);
 app.configure(middleware);
 app.use(express.notFound());
 app.use(

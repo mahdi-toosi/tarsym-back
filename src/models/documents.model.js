@@ -21,45 +21,19 @@ module.exports = function (app) {
                 // maxlength: 800
             },
             location: {
-                type: {
-                    type: String,
-                    enum: ["Point"],
-                },
-                coordinates: {
-                    type: [Number],
-                    index: "2dsphere",
-                },
+                type: { type: String, enum: ["Point"] },
+                coordinates: { type: [Number], index: "2dsphere" },
             },
-            zoomLevel: {
-                type: Number,
-            },
-            tags: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: "taxonomies",
-                    // required: [true, 'برای سرچ بهتر کاربر ثبت حداقل یک تگ نیاز است'],
-                },
-            ],
-            categories: [
-                {
-                    type: Schema.Types.ObjectId,
-                    ref: "taxonomies",
-                },
-            ],
+            zoomLevel: { type: Number },
+            tags: [{ type: Schema.Types.ObjectId, ref: "taxonomies" }],
+            categories: [{ type: Schema.Types.ObjectId, ref: "taxonomies" }],
             date: {
                 type: Number,
                 required: [true, "برای سرچ بهتر کاربر ثبت تاریخ نیاز است"],
             },
-            junk: {
-                type: String,
-                required: true,
-            },
-            root: {
-                type: Boolean,
-            },
-            childs_id: {
-                type: Array,
-            },
+            junk: { type: String, required: true },
+            root: { type: Boolean },
+            childs_id: { type: Array },
             user: {
                 id: {
                     type: Schema.Types.ObjectId,

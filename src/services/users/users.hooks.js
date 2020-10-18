@@ -6,6 +6,8 @@ const {
     LimitQuery,
 } = require("../../hooks/users");
 
+const { SendWelcomeMsg } = require("../../hooks/messages");
+
 const { authenticate } = require("@feathersjs/authentication").hooks;
 
 const {
@@ -54,7 +56,7 @@ module.exports = {
         ],
         find: [ValidResultLength()],
         get: [],
-        create: [],
+        create: [SendWelcomeMsg()],
         update: [],
         patch: [],
         remove: [],

@@ -7,19 +7,10 @@ module.exports = function (app) {
     const mongooseClient = app.get("mongooseClient");
     const { Schema } = mongooseClient;
     const schema = new Schema({
-        name: {
-            type: String,
-            required: true,
-            unique: true,
-        },
+        name: { type: String, required: true, unique: true },
         //*    categories type = 1 / tags type = 2
-        type: {
-            type: Number,
-            required: true,
-        },
-        childs: {
-            type: [String],
-        },
+        type: { type: Number, required: true },
+        childs: { type: [String] },
         documents: [
             {
                 type: Schema.Types.ObjectId,
