@@ -47,16 +47,16 @@ module.exports = {
     },
 
     after: {
-        all: [
-            protect("password"),
-            (ctx) => {
-                delete ctx.result.limit;
-                return ctx;
-            },
-        ],
+        all: [protect("passwords")],
         find: [ValidResultLength()],
         get: [],
-        create: [SendWelcomeMsg()],
+        create: [
+            (ctx) => {
+                console.log(ctx.result);
+                return ctx;
+            },
+            SendWelcomeMsg(),
+        ],
         update: [],
         patch: [],
         remove: [],

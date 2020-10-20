@@ -11,5 +11,7 @@ process.on("unhandledRejection", (reason, p) =>
 
 const msg = `Application started on =>  http${
     host == "localhost" ? "" : "s"
-}://${host}:${port}`;
+}://${host}:${port} \n
+DB => ${app.get("mongodb")}
+`;
 server.on("listening", () => console.log(msg));

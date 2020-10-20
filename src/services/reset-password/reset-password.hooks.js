@@ -77,15 +77,9 @@ module.exports = {
                 const hash_password = await bcrypt.hash(password, 10);
                 // * add fake password to user
                 const UserUpdated = await Users.findOneAndUpdate(
-                    {
-                        _id,
-                    },
-                    {
-                        password: hash_password,
-                    },
-                    {
-                        new: true,
-                    }
+                    { _id },
+                    { password: hash_password },
+                    { new: true }
                 ).exec();
                 // * create accessToken
                 //  TODO => can i build accessToken without search in users ?
