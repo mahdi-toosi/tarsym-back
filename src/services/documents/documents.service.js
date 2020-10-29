@@ -6,7 +6,10 @@ const hooks = require("./documents.hooks");
 module.exports = function (app) {
     const options = {
         Model: createModel(app),
-        paginate: app.get("paginate"),
+        paginate: {
+            default: 200,
+            max: 200,
+        },
     };
 
     // Initialize our service with any options it requires

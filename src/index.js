@@ -9,9 +9,7 @@ process.on("unhandledRejection", (reason, p) =>
     logger.error("Unhandled Rejection at: Promise ", p, reason)
 );
 
-const msg = `Application started on =>  http${
+const msg = `Application started on => http${
     host == "localhost" ? "" : "s"
-}://${host}:${port} \n
-DB => ${app.get("mongodb")}
-`;
+}://${host}:${port}`;
 server.on("listening", () => console.log(msg));
