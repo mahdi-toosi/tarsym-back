@@ -2,9 +2,6 @@ const { authenticate } = require("@feathersjs/authentication").hooks;
 
 const {
     // JSON_pars_data,
-    before_taxonomies_hook,
-    set_new_tags,
-    set_category,
     remove_childs,
     remove_useless_fields,
 } = require("../../utils/hooks");
@@ -23,16 +20,9 @@ module.exports = {
                 ctx.data.user = { id: user._id };
                 return ctx;
             },
-            before_taxonomies_hook(),
         ],
-        update: [
-            ValidRole(process.env["URoleDrawer"]),
-            before_taxonomies_hook(),
-        ],
-        patch: [
-            ValidRole(process.env["URoleDrawer"]),
-            before_taxonomies_hook(),
-        ],
+        update: [ValidRole(process.env["URoleDrawer"])],
+        patch: [ValidRole(process.env["URoleDrawer"])],
         remove: [ValidRole(process.env["URoleDrawer"])],
     },
 
@@ -40,9 +30,9 @@ module.exports = {
         all: [remove_useless_fields()],
         find: [],
         get: [],
-        create: [set_new_tags(), set_category()],
-        update: [set_new_tags(), set_category()],
-        patch: [set_new_tags(), set_category()],
+        create: [],
+        update: [],
+        patch: [],
         remove: [remove_childs()],
     },
 

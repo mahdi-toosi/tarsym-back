@@ -1,6 +1,5 @@
 // eslint-disable-next-line no-unused-vars
 const Docs = require("../services/documents/documents.class");
-const Msgs = require("../services/messages/messages.class");
 const path = require("path");
 const { authenticate } = require("@feathersjs/express");
 const UploadImage = require("./upload-image");
@@ -9,8 +8,6 @@ module.exports = function (app) {
     // Add your custom middleware here. Remember that
     // in Express, the order matters.
     // custom api
-    app.get("/unreadMsgs", Msgs.count_unread_msgs);
-
     app.post("/create/documents/relationship", Docs.create_relationships);
 
     app.get("/searchInDocs", Docs.search_in_docs); // TODO => is it need to check auth and role ?

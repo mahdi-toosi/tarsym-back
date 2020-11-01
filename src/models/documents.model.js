@@ -20,13 +20,9 @@ module.exports = function (app) {
                 required: [true, "به متنی برای توضیح این مختصات نیاز است"],
                 // maxlength: 800
             },
-            location: {
-                type: { type: String, enum: ["Point"] },
-                coordinates: { type: [Number], index: "2dsphere" },
-            },
             zoomLevel: { type: Number },
-            tags: [{ type: Schema.Types.ObjectId, ref: "taxonomies" }],
-            categories: [{ type: Schema.Types.ObjectId, ref: "taxonomies" }],
+            tags: [String],
+            categories: [String],
             date: {
                 type: Number,
                 required: [true, "برای سرچ بهتر کاربر ثبت تاریخ نیاز است"],
@@ -35,7 +31,7 @@ module.exports = function (app) {
             root: { type: Boolean },
             childs_id: { type: Array },
             user: {
-                id: {
+                _id: {
                     type: Schema.Types.ObjectId,
                     ref: "users",
                 },
