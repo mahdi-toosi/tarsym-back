@@ -111,7 +111,8 @@ lib/
 data/
 
 test
-public/dist/
+public/statics/
+public/administrator/
 public/UPLOADS/images/
 
 .ENV

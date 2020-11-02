@@ -17,7 +17,7 @@ module.exports = {
             ValidRole(process.env["URoleDrawer"]),
             (ctx) => {
                 const user = ctx.params.user;
-                ctx.data.user = { id: user._id };
+                ctx.data.user = { _id: user._id };
                 return ctx;
             },
         ],
