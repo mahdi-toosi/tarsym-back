@@ -28,8 +28,8 @@ app.use(
         extended: true,
     })
 );
-app.use(favicon(path.join(app.get("public"), "dist/new-favicon.ico")));
 app.use("/", express.static(app.get("public")));
+app.use(favicon(path.join(app.get("public"), "statics/new-favicon.ico")));
 
 //* log all requests
 app.use(
