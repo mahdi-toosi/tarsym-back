@@ -24,9 +24,7 @@ module.exports = function (app) {
             //     type: String,
             // },
         },
-        {
-            timestamps: true,
-        }
+        { timestamps: true }
     );
 
     // This is necessary to avoid model compilation errors in watch mode

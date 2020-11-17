@@ -3,11 +3,21 @@ const Docs = require("../services/documents/documents.class");
 const path = require("path");
 const { authenticate } = require("@feathersjs/express");
 const UploadImage = require("./upload-image");
+const blabla = require("./blabla");
 
 module.exports = function (app) {
     // Add your custom middleware here. Remember that
     // in Express, the order matters.
     // custom api
+    app.get("/setFlags", blabla.setFlags);
+    app.get("/setUsername", blabla.setUsername);
+    app.get("/addManyData", blabla.addManyData);
+
+    app.post(
+        "/administrator/copyDoc",
+        authenticate("jwt"),
+        Docs.copyDocForAdmin
+    );
 
     app.post("/create/documents/relationship", Docs.create_relationships);
 
@@ -20,12 +30,12 @@ module.exports = function (app) {
         UploadImage.responseToClient()
     );
 
-    // Define tempalte engine
+    // Define template engine
     // app.set('view engine', 'pug');
     // app.set('views', 'resources/views/');
 
     // general routes
-    app.get("/administrator", (req, res) => {
+    app.get("/administrator/*", (req, res) => {
         try {
             res.sendFile(
                 path.join(app.get("public"), "administrator/index.html")

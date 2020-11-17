@@ -114,6 +114,7 @@ test
 public/statics/
 public/administrator/
 public/UPLOADS/images/
+package-lock.json
 
 .ENV
 tarsym-back.zip

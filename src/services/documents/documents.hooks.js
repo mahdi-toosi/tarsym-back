@@ -4,7 +4,7 @@ const {
     // JSON_pars_data,
     remove_childs,
     remove_useless_fields,
-} = require("../../utils/hooks");
+} = require("../../hooks/documents");
 
 const { ValidRole } = require("../../hooks/users");
 
@@ -17,11 +17,18 @@ module.exports = {
             ValidRole(process.env["URoleDrawer"]),
             (ctx) => {
                 const user = ctx.params.user;
-                ctx.data.user = { _id: user._id };
+                if (!ctx.data.user)
+                    ctx.data.user = { _id: user._id, username: user.username };
                 return ctx;
             },
         ],
-        update: [ValidRole(process.env["URoleDrawer"])],
+        update: [
+            ValidRole(process.env["URoleDrawer"]),
+            (ctx) => {
+                ctx.data.read = false;
+                return ctx;
+            },
+        ],
         patch: [ValidRole(process.env["URoleDrawer"])],
         remove: [ValidRole(process.env["URoleDrawer"])],
     },

@@ -1,12 +1,12 @@
 const logger = require("../logger");
 
-exports.RoleBeforeCreate = () => async (ctx) => {
+const RoleBeforeCreate = () => async (ctx) => {
     const dataRole = ctx.data.role;
     if (dataRole) throw new Error("You don't have permission");
     else return ctx;
 };
 
-exports.RoleBeforeUpdate = () => async (ctx) => {
+const RoleBeforeUpdate = () => async (ctx) => {
     const user = ctx.params.user;
     if (user.role == process.env["URoleAdmin"]) return ctx;
     if (!ctx.data._id) throw new Error("You don't have permission");
@@ -20,13 +20,13 @@ exports.RoleBeforeUpdate = () => async (ctx) => {
     return ctx;
 };
 
-exports.ValidRole = (validRole) => (ctx) => {
+const ValidRole = (validRole) => (ctx) => {
     const user_role = ctx.params.user.role;
     if (user_role <= validRole) throw new Error("You dont have permission");
     else return ctx;
 };
 
-exports.LimitQuery = () => (ctx) => {
+const LimitQuery = () => (ctx) => {
     if (ctx.params.query["$skip"]) {
         if (ctx.params.user.role == process.env["URoleAdmin"]) return ctx;
         logger.error("Error 9568");
@@ -35,7 +35,7 @@ exports.LimitQuery = () => (ctx) => {
     return ctx;
 };
 
-exports.ValidResultLength = () => (ctx) => {
+const ValidResultLength = () => (ctx) => {
     const lengthOfData = ctx.result.data.length;
     if (lengthOfData > 2) {
         const user_role = ctx.params.user.role;
@@ -46,4 +46,12 @@ exports.ValidResultLength = () => (ctx) => {
             throw new Error("Error");
         }
     }
+};
+
+module.exports = {
+    RoleBeforeCreate,
+    RoleBeforeUpdate,
+    ValidRole,
+    LimitQuery,
+    ValidResultLength,
 };

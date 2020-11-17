@@ -11,44 +11,29 @@ module.exports = function (app) {
 
     const schema = new Schema(
         {
-            title: {
-                type: String,
-                required: [true, "به تیتر برای توضیح این مختصات نیاز است"],
-            },
-            excerpt: {
-                type: String,
-                required: [true, "به متنی برای توضیح این مختصات نیاز است"],
-                // maxlength: 800
-            },
-            zoomLevel: { type: Number },
+            title: { type: String, required: true },
+            excerpt: { type: String, required: true },
             tags: [String],
             categories: [String],
-            date: {
-                type: Number,
-                required: [true, "برای سرچ بهتر کاربر ثبت تاریخ نیاز است"],
-            },
+            date: { type: Number, required: true },
             junk: { type: String, required: true },
             root: { type: Boolean },
             childs_id: { type: Array },
-            user: {
-                _id: {
-                    type: Schema.Types.ObjectId,
-                    ref: "users",
-                },
-                // name: {
-                //     type: String,
-                // },
-                // image: {
-                //     type: String,
-                // },
-                // situation: {
-                //     type: String,
-                // },
+            situation: {
+                type: String,
+                // *** situation levels
+                // * draft
+                // * publish
+                // * private
+                // * trash
             },
+            vitrine: { type: Boolean },
+            copiedFrom: { type: String },
+            star: { type: Boolean },
+            read: { type: Boolean },
+            user: { _id: String, username: { type: String } },
         },
-        {
-            timestamps: true,
-        }
+        { timestamps: true }
     );
 
     schema.plugin(mongoose_fuzzy_searching, {
