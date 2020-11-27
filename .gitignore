@@ -111,10 +111,12 @@ lib/
 data/
 
 test
+public/imgs/
 public/statics/
 public/administrator/
 public/UPLOADS/images/
-package-lock.json
+public/UPLOADS/avatars/
+public/UPLOADS/documents/
 
 .ENV
 tarsym-back.zip

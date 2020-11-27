@@ -25,7 +25,7 @@ exports.create_relationships = async (req, res) => {
 
 exports.copyDocForAdmin = async (req, res) => {
     // * check for valid Role
-    if (req.user.role != process.env["URoleAdmin"]) {
+    if (req.user.role != process.env["AdminRole"]) {
         res.status(401).send("Error: Request failed with status code 401");
         return;
     }

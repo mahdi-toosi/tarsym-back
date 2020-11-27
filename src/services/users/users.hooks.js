@@ -41,11 +41,11 @@ module.exports = {
             authenticate("jwt"),
             RoleBeforeUpdate(),
         ],
-        remove: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
+        remove: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
     },
 
     after: {
-        all: [protect("passwords")],
+        all: [protect("password")],
         find: [ValidResultLength()],
         get: [],
         create: [],

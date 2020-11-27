@@ -3,6 +3,7 @@ const { authenticate } = require("@feathersjs/authentication").hooks;
 const {
     // JSON_pars_data,
     remove_childs,
+    remove_images_from_fs,
     remove_useless_fields,
 } = require("../../hooks/documents");
 
@@ -14,7 +15,7 @@ module.exports = {
         find: [],
         get: [],
         create: [
-            ValidRole(process.env["URoleDrawer"]),
+            ValidRole(process.env["DrawerRole"]),
             (ctx) => {
                 const user = ctx.params.user;
                 if (!ctx.data.user)
@@ -23,24 +24,24 @@ module.exports = {
             },
         ],
         update: [
-            ValidRole(process.env["URoleDrawer"]),
+            ValidRole(process.env["DrawerRole"]),
             (ctx) => {
                 ctx.data.read = false;
                 return ctx;
             },
         ],
-        patch: [ValidRole(process.env["URoleDrawer"])],
-        remove: [ValidRole(process.env["URoleDrawer"])],
+        patch: [ValidRole(process.env["DrawerRole"])],
+        remove: [ValidRole(process.env["DrawerRole"])],
     },
 
     after: {
-        all: [remove_useless_fields()],
+        all: [remove_useless_fields],
         find: [],
         get: [],
         create: [],
         update: [],
         patch: [],
-        remove: [remove_childs()],
+        remove: [remove_images_from_fs, remove_childs],
     },
 
     error: {

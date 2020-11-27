@@ -1,6 +1,6 @@
 {
     "host": "dev.tarsym.ir",
-    "port": "2348",
+    "port": 2348,
     "public": "../public",
     "paginate": {
         "default": 30,

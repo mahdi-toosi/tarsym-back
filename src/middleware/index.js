@@ -24,10 +24,18 @@ module.exports = function (app) {
     app.get("/searchInDocs", Docs.search_in_docs); // TODO => is it need to check auth and role ?
 
     app.post(
-        "/upload-images",
+        "/uploadDocImage",
         authenticate("jwt"),
-        UploadImage.storeWithMulter(),
-        UploadImage.responseToClient()
+        UploadImage.storeDocImageWithMulter,
+        UploadImage.resToClientForDoc
+    );
+    app.post(
+        "/uploadAvatarImage",
+        authenticate("jwt"),
+        UploadImage.storeAvatarWithMulter,
+        UploadImage.resizeAvatarAndResponse,
+        UploadImage.addAvatarToDatabase,
+        UploadImage.removeAvatarFromFS
     );
 
     // Define template engine

@@ -7,8 +7,12 @@ module.exports = function (app) {
     const mongooseClient = app.get("mongooseClient");
     const { Schema } = mongooseClient;
     const schema = new Schema({
-        user_id: { type: Schema.Types.ObjectId, ref: "users" },
-        username: { type: String, unique: true },
+        user_id: { type: String },
+        username: {
+            type: String,
+            unique: true,
+            dropDups: true,
+        },
         random_num: { type: String },
         expireAt: {
             type: Date,

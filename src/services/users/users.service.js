@@ -5,10 +5,10 @@ const hooks = require("./users.hooks");
 
 module.exports = function (app) {
     // * initial user roles
-    process.env["URoleAdmin"] = 48;
-    process.env["URoleDrawer"] = 35;
-    process.env["URoleUser"] = 3;
-    process.env["URoleSuspension"] = 1;
+    process.env["AdminRole"] = 48;
+    process.env["DrawerRole"] = 35;
+    process.env["UserRole"] = 3;
+    process.env["SuspensionRole"] = 1;
 
     const options = {
         Model: createModel(app),

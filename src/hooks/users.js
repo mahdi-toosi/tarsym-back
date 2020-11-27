@@ -8,7 +8,7 @@ const RoleBeforeCreate = () => async (ctx) => {
 
 const RoleBeforeUpdate = () => async (ctx) => {
     const user = ctx.params.user;
-    if (user.role == process.env["URoleAdmin"]) return ctx;
+    if (user.role == process.env["AdminRole"]) return ctx;
     if (!ctx.data._id) throw new Error("You don't have permission");
     if (ctx.data._id != user._id) {
         logger.error(
@@ -28,7 +28,7 @@ const ValidRole = (validRole) => (ctx) => {
 
 const LimitQuery = () => (ctx) => {
     if (ctx.params.query["$skip"]) {
-        if (ctx.params.user.role == process.env["URoleAdmin"]) return ctx;
+        if (ctx.params.user.role == process.env["AdminRole"]) return ctx;
         logger.error("Error 9568");
         throw new Error("Error 9568");
     }
@@ -39,7 +39,7 @@ const ValidResultLength = () => (ctx) => {
     const lengthOfData = ctx.result.data.length;
     if (lengthOfData > 2) {
         const user_role = ctx.params.user.role;
-        if (user_role == process.env["URoleAdmin"]) return ctx;
+        if (user_role == process.env["AdminRole"]) return ctx;
         else {
             // TODO => how to log user ip address ?!
             logger.error("someone try to get so many users ");

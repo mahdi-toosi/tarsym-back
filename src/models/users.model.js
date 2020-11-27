@@ -15,8 +15,22 @@ module.exports = function (app) {
                 unique: true,
                 dropDups: true,
             },
+            avatar: { type: String },
+            mobile: { type: String },
+            nationalCode: { type: String },
+            job: { type: String },
+            city: { type: String },
             password: { type: String, required: true },
-            role: { type: Number, default: process.env["URoleUser"] },
+            role: {
+                type: Number,
+                // * roles = {  // defined in users.service.js
+                // *    admin: 48,
+                // *    drawer: 35,
+                // *    user: 3,
+                // *    suspension: 1,
+                // * }
+                default: process.env["UserRole"],
+            },
             // auth0Id: {
             //     type: String,
             // },

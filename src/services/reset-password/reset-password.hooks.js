@@ -7,8 +7,8 @@ const { ValidRole } = require("../../hooks/users");
 module.exports = {
     before: {
         all: [],
-        find: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
-        get: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
+        find: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
+        get: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
         create: [
             async (ctx) => {
                 // * find user if exist
@@ -36,8 +36,8 @@ module.exports = {
                 return ctx;
             },
         ],
-        update: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
-        patch: [authenticate("jwt"), ValidRole(process.env["URoleAdmin"])],
+        update: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
+        patch: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
         remove: [
             (ctx) => {
                 // * validate

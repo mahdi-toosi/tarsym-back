@@ -22,7 +22,9 @@ const setUsername = async (req, res) => {
             username: req.query.username,
         });
         const result = await docsModel.updateMany(
-            { "user.username": { $exists: false } },
+            {
+                // "user.username": { $exists: false }
+            },
             { user: { _id: admin._id, username: admin.username } }
         );
         res.status(200).send({

@@ -22,10 +22,10 @@ module.exports = function (app) {
             situation: {
                 type: String,
                 // *** situation levels
-                // * draft
                 // * publish
                 // * private
                 // * trash
+                // * draft
             },
             vitrine: { type: Boolean },
             copiedFrom: { type: String },
