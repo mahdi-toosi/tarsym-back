@@ -3,7 +3,6 @@ const {
     RoleBeforeUpdate,
     ValidResultLength,
     ValidRole,
-    LimitQuery,
 } = require("../../hooks/users");
 
 const { authenticate } = require("@feathersjs/authentication").hooks;
@@ -28,25 +27,25 @@ module.exports = {
             //     return ctx;
             // },
         ],
-        find: [authenticate("jwt"), LimitQuery()],
+        find: [authenticate("jwt")],
         get: [authenticate("jwt")],
-        create: [RoleBeforeCreate(), hashPassword("password")],
+        create: [RoleBeforeCreate, hashPassword("password")],
         update: [
             hashPassword("password"),
             authenticate("jwt"),
-            RoleBeforeUpdate(),
+            RoleBeforeUpdate,
         ],
         patch: [
             hashPassword("password"),
             authenticate("jwt"),
-            RoleBeforeUpdate(),
+            RoleBeforeUpdate,
         ],
         remove: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
     },
 
     after: {
         all: [protect("password")],
-        find: [ValidResultLength()],
+        find: [ValidResultLength],
         get: [],
         create: [],
         update: [],

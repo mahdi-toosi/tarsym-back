@@ -1,9 +1,9 @@
-// reset-password-model.js - A mongoose model
+// expiringData-model.js - A mongoose model
 //
 // See http://mongoosejs.com/docs/models.html
 // for more of what you can do here.
 module.exports = function (app) {
-    const modelName = "resetPassword";
+    const modelName = "expiringData";
     const mongooseClient = app.get("mongooseClient");
     const { Schema } = mongooseClient;
     const schema = new Schema({
@@ -13,7 +13,12 @@ module.exports = function (app) {
             unique: true,
             dropDups: true,
         },
-        random_num: { type: String },
+        mobile: {
+            type: String,
+            unique: true,
+            dropDups: true,
+        },
+        code: { type: String },
         expireAt: {
             type: Date,
             default: Date.now,
