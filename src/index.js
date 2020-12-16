@@ -9,7 +9,8 @@ process.on("unhandledRejection", (reason, p) =>
     logger.error("Unhandled Rejection at: Promise ", p, reason)
 );
 
-const msg = `Application started on => http${
-    host == "localhost" ? "" : "s"
-}://${host}:${port}`;
+const msg = `Application started on 
+    => http${host == "localhost" ? "" : "s"}://${host}:${port} 
+    => with ${process.env.NODE_ENV || "development"} mode`;
+
 server.on("listening", () => console.log(msg));

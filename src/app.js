@@ -6,7 +6,8 @@ const cors = require("cors");
 const morgan = require("morgan");
 const logger = require("./logger");
 const feathers = require("@feathersjs/feathers");
-const configuration = require("@feathersjs/configuration");
+// const configuration = require("@feathersjs/configuration");
+const configuration = require("../config/feathers");
 const express = require("@feathersjs/express");
 const middleware = require("./middleware");
 const services = require("./services");
@@ -16,7 +17,11 @@ const mongoose = require("./mongoose");
 const app = express(feathers());
 
 //* Load app configuration
-app.configure(configuration());
+// app.configure(configuration());
+Object.keys(configuration).forEach(function (name) {
+    var value = configuration[name];
+    app.set(name, value);
+});
 
 //* Enable security, CORS, compression, favicon, public folder and body parsing
 app.use(helmet());
@@ -28,8 +33,14 @@ app.use(
         extended: true,
     })
 );
-app.use("/", express.static(app.get("public")));
-app.use(favicon(path.join(app.get("public"), "statics/new-favicon.ico")));
+app.use("/", express.static(path.join(__dirname, "../public")));
+console.log(
+    "favicon =>",
+    path.join(app.get("public"), "../public/statics/new-favicon.ico")
+);
+app.use(
+    favicon(path.join(app.get("public"), "../public/statics/new-favicon.ico"))
+);
 
 //* log all requests
 app.use(

@@ -46,7 +46,7 @@ module.exports = function (app) {
     app.get("/administrator/*", (req, res) => {
         try {
             res.sendFile(
-                path.join(app.get("public"), "administrator/index.html")
+                path.join(__dirname, "../public/administrator/index.html")
             );
         } catch (error) {
             console.log(error);
@@ -54,6 +54,7 @@ module.exports = function (app) {
     });
     app.get("*", (req, res) => {
         try {
+            console.log("public =>", app.get("public"));
             res.sendFile(path.join(app.get("public"), "statics/index.html"));
         } catch (error) {
             console.log(error);

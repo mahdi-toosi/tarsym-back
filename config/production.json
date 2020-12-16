@@ -1,0 +1,44 @@
+{
+    "host": "tarsym.ir",
+    "port": "2345",
+    "public": "../public",
+    "paginate": {
+        "default": 30,
+        "max": 50
+    },
+    "authentication": {
+        "entity": "user",
+        "service": "users",
+        "secret": "07MTOHkvmDWzNZ0HExXP+Lv7Qf0=",
+        "authStrategies": [
+            "jwt",
+            "local"
+        ],
+        "jwtOptions": {
+            "header": {
+                "typ": "access"
+            },
+            "audience": "https://tarsym.ir",
+            "issuer": "feathers",
+            "algorithm": "HS256",
+            "expiresIn": "1d"
+        },
+        "local": {
+            "usernameField": "\\username",
+            "passwordField": "password"
+        },
+        "oauth": {
+            "redirect": "/",
+            "google": {
+                "key": "<google oauth key>",
+                "secret": "<google oauth secret>",
+                "scope": [
+                    "email",
+                    "profile",
+                    "openid"
+                ]
+            }
+        }
+    },
+    "mongodb": "mongodb://tarsymir_username:zqZyDNfd4ERwn5p@localhost:27017/tarsymir_database"
+}

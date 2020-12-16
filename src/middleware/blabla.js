@@ -40,7 +40,9 @@ const addManyData = async (req, res) => {
     const docsModel = req.app.service("documents").Model;
     const usersModel = req.app.service("users").Model;
     try {
-        const user = await usersModel.findOne({ username: "mahditoosi" });
+        const user = await usersModel.findOne({
+            username: req.query.username,
+        });
         for (let index = 0; index < 100; index++) {
             await docsModel.create({
                 title: `موضوع داکیومنت ${index + 1}`,

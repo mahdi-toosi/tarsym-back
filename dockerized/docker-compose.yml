@@ -1,0 +1,32 @@
+version: "3"
+
+services:
+    tarsym:
+        build: .
+        stdin_open: true
+        volumes:
+            - .:/usr/src/tarsym
+        ports:
+            - "3000:3000"
+        networks:
+            - tarsymNetwork
+        links:
+            - mongodb
+        depends_on:
+            - mongodb
+    mongodb:
+        image: mongo:latest
+        # volumes:
+        #     - mongo_data:/data/db
+        volumes:
+            - ./mongoDB:/data/db
+        ports:
+            - "27017:27017"
+        networks:
+            - tarsymNetwork
+# volumes:
+#     mongo_data:
+#         driver: local
+networks:
+    tarsymNetwork:
+        driver: bridge
