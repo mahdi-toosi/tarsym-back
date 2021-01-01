@@ -31,7 +31,20 @@ module.exports = {
             },
         ],
         patch: [ValidRole(process.env["DrawerRole"])],
-        remove: [ValidRole(process.env["DrawerRole"])],
+        remove: [
+            ValidRole(process.env["DrawerRole"]),
+            async (ctx) => {
+                const doc_id = ctx.id;
+                const DocsModel = ctx.app.service("documents").Model;
+                const fathers = await DocsModel.find({
+                    childs_id: doc_id,
+                }).countDocuments();
+
+                if (fathers < 2) return ctx;
+
+                throw new Error("documents has at least 2 fathers");
+            },
+        ],
     },
 
     after: {

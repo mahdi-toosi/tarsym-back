@@ -11,12 +11,12 @@ module.exports = function (app) {
 
     const schema = new Schema(
         {
-            title: { type: String, required: true },
-            excerpt: { type: String, required: true },
+            title: { type: String },
+            excerpt: { type: String },
             tags: [String],
             categories: [String],
-            date: { type: Number, required: true },
-            junk: { type: String, required: true },
+            date: { type: Date },
+            junk: { type: String },
             root: { type: Boolean },
             childs_id: { type: Array },
             situation: {
@@ -44,12 +44,12 @@ module.exports = function (app) {
                 weight: 5,
                 prefixOnly: true,
             },
-            {
-                name: "excerpt",
-                minSize: 8,
-                weight: 10,
-                prefixOnly: true,
-            },
+            // {
+            //     name: "excerpt",
+            //     minSize: 8,
+            //     weight: 10,
+            //     prefixOnly: true,
+            // },
         ],
     });
 

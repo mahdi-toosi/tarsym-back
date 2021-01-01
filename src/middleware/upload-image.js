@@ -48,10 +48,23 @@ const resizeAvatarAndResponse = async (req, res, next) => {
     next();
 };
 
+const addAvatarToDatabase = async (req, res, next) => {
+    const usersModel = req.app.service("users").Model;
+
+    const user = await usersModel.findById(req.user._id);
+    req.user.latestAvatar = user.avatar;
+
+    const avatar = req.body.avatarUrl;
+    await usersModel.findByIdAndUpdate(req.user._id, { avatar });
+
+    next();
+};
+
 const removeAvatarFromFS = (req) => {
-    const avatar = req.user.avatar;
-    if (!avatar) return;
-    const avatarAdr = avatar.split("/");
+    const latestAvatar = req.user.latestAvatar;
+    if (!latestAvatar) return;
+
+    const avatarAdr = latestAvatar.split("/");
     const lastImageName = avatarAdr[avatarAdr.length - 1];
     const path = `${uploadPath}/avatars/${lastImageName}`;
     try {
@@ -59,13 +72,6 @@ const removeAvatarFromFS = (req) => {
     } catch (error) {
         console.log(error);
     }
-};
-
-const addAvatarToDatabase = async (req, res, next) => {
-    const avatar = req.body.avatarUrl;
-    const usersModel = req.app.service("users").Model;
-    await usersModel.findByIdAndUpdate(req.user._id, { avatar });
-    next();
 };
 
 module.exports = {

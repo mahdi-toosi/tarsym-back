@@ -35,7 +35,14 @@ const remove_images_from_fs = (ctx) => {
             if (addr.length) paths.push(`public/${addr[0]}`);
         });
 
-        if (paths.length) paths.forEach((path) => fs.unlinkSync(path));
+        if (paths.length)
+            paths.forEach((path) => {
+                try {
+                    fs.unlinkSync(path);
+                } catch (error) {
+                    console.log("remove_images_from_fs error => ", error);
+                }
+            });
     } catch (error) {
         console.log(error);
     }
@@ -48,6 +55,7 @@ const remove_childs = async (ctx) => {
     if (!child_ids.length) return ctx;
     try {
         const DocService = ctx.app.service("documents");
+
         for (let index = 0; index < child_ids.length; index++) {
             const child_id = child_ids[index];
             await DocService.remove(child_id, ctx.params);
@@ -59,7 +67,7 @@ const remove_childs = async (ctx) => {
 };
 
 module.exports = {
+    remove_useless_fields,
     remove_images_from_fs,
     remove_childs,
-    remove_useless_fields,
 };

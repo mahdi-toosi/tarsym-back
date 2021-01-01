@@ -1,12 +1,11 @@
 const bcrypt = require("bcryptjs");
+const axios = require("axios");
 
 const createCode = async (ctx) => {
     // * find user if exist
     const usersModel = ctx.app.service("users").Model;
     const user = await usersModel
-        .findOne({
-            username: ctx.data.username,
-        })
+        .findOne({ username: ctx.data.username })
         .exec();
     if (!user) throw new Error("username not found");
 
@@ -16,16 +15,34 @@ const createCode = async (ctx) => {
     ctx.data = {
         user_id: user._id,
         username: user.username,
+        mobile: user.mobile,
         code,
     };
     return ctx;
 };
 
-const sendMsg = (ctx) => {
-    // TODO => send SMS
-    const code = ctx.result.code;
+const sendMsg = async (ctx) => {
+    const { mobile, code } = ctx.result;
     if (!code) throw new Error("Server problem : generating code");
-    console.log({ code });
+
+    const token = "lzHZts1crv81Fh-9oS1NXecIj80ayUwlxE0I4Nsyck8=";
+    await axios
+        .post(
+            "http://rest.ippanel.com/v1/messages",
+            {
+                originator: "+985000125475",
+                recipients: [mobile],
+                message: code,
+            },
+            { headers: { Authorization: `AccessKey ${token}` } }
+        )
+        .then((res) => {
+            console.log({ smsRes: res.data });
+        })
+        .catch((error) => {
+            console.log("sending failed =>", { error });
+        });
+
     // * empty res and send msg for user
     ctx.result = {};
     ctx.result.msg = "مسیج حاوی کد برای شما ارسال شد ...";
@@ -34,10 +51,10 @@ const sendMsg = (ctx) => {
 
 const validate = (ctx) => {
     const { username, code } = ctx.params.query;
-    const errors = [];
-    if (!username || username.length < 4) errors.push("username error");
-    if (!code || code.length !== 6) errors.push("code error");
-    if (errors.length) throw new Error("validation failed");
+    let valid = true;
+    if (!username || username.length < 4) valid = false;
+    if (!code || code.length !== 6) valid = false;
+    if (!valid) throw new Error("validation failed");
     return ctx;
 };
 

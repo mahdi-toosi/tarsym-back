@@ -1,3 +1,4 @@
+const fs = require("fs");
 const { Service } = require("feathers-mongoose");
 
 exports.Documents = class Documents extends Service {};
@@ -165,4 +166,18 @@ exports.search_in_docs = async (req, res) => {
             });
         else console.log("\n search_in_docs => ", error.codeName);
     }
+};
+
+exports.remove_imgs = async (req, res) => {
+    const { removedImgs } = req.body;
+    if (!removedImgs) throw new Error("error on remove imgs");
+    removedImgs.forEach((img) => {
+        const path = `${req.app.get("public")}/UPLOADS/documents/${img}`;
+        try {
+            fs.unlinkSync(path);
+        } catch (error) {
+            console.log(error);
+        }
+    });
+    res.status(200).send("done");
 };
