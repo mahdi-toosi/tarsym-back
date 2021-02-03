@@ -29,7 +29,7 @@ module.exports = function (app) {
                 // *    user: 3,
                 // *    suspension: 1,
                 // * }
-                default: process.env["UserRole"],
+                default: process.env["DrawerRole"],
             },
             // auth0Id: {
             //     type: String,

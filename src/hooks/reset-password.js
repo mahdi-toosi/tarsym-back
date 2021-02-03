@@ -24,28 +24,31 @@ const createCode = async (ctx) => {
 const sendMsg = async (ctx) => {
     const { mobile, code } = ctx.result;
     if (!code) throw new Error("Server problem : generating code");
-
+    let msg = "مسیج حاوی کد برای شما ارسال شد ...";
+    let type = "info";
     const token = "lzHZts1crv81Fh-9oS1NXecIj80ayUwlxE0I4Nsyck8=";
     await axios
         .post(
-            "http://rest.ippanel.com/v1/messages",
+            "http://rest.ippanel.com/v1/messages/patterns/send",
             {
                 originator: "+985000125475",
-                recipients: [mobile],
-                message: code,
+                pattern_code: "8eh0d05o1x",
+                recipient: mobile,
+                values: { code },
             },
             { headers: { Authorization: `AccessKey ${token}` } }
         )
-        .then((res) => {
-            console.log({ smsRes: res.data });
-        })
+        .then()
         .catch((error) => {
-            console.log("sending failed =>", { error });
+            console.log("sending sms failed =>", { error });
+            msg =
+                "مشکلی در ارسال مسیج بوجود آمده ... با پشتیبانی تماس بگیرید ... ";
+            type = "error";
         });
 
     // * empty res and send msg for user
     ctx.result = {};
-    ctx.result.msg = "مسیج حاوی کد برای شما ارسال شد ...";
+    ctx.result = { type, msg };
     return ctx;
 };
 

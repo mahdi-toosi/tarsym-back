@@ -63,7 +63,7 @@ const addManyData = async (req, res) => {
 
         res.status(200).send({ result: "100 داکیومن ساخته شد" });
     } catch (error) {
-        console.log("\n setUsername Error =>", error);
+        console.log("\n addManyData Error =>", error);
     }
 };
 
