@@ -1,5 +1,3 @@
-const { Service } = require('feathers-mongoose');
+const { Service } = require("feathers-mongoose");
 
-exports.ExpiringData = class ExpiringData extends Service {
-  
-};
+exports.ExpiringData = class ExpiringData extends Service {};

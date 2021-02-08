@@ -6,6 +6,7 @@ const cors = require("cors");
 const morgan = require("morgan");
 const logger = require("./logger");
 const feathers = require("@feathersjs/feathers");
+require("dotenv").config();
 const configuration = require("./config");
 const express = require("@feathersjs/express");
 const middleware = require("./middleware");

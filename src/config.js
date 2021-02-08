@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
     host: "localhost",
-    port: "3000",
+    port: process.env.PORT,
     public: path.join(__dirname, "../public"),
     paginate: {
         default: 30,
@@ -11,7 +11,7 @@ module.exports = {
     authentication: {
         entity: "user",
         service: "users",
-        secret: "07GTOBkvmDWzNZS0HExP+Lv7Qf0=",
+        secret: process.env.AUTH_SECRET,
         authStrategies: ["jwt", "local"],
         jwtOptions: {
             header: {
@@ -35,5 +35,5 @@ module.exports = {
             },
         },
     },
-    mongodb: "mongodb://localhost:27017/tarsymDB",
+    mongodb: process.env.MONGO_DB,
 };

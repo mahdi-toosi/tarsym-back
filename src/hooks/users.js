@@ -10,12 +10,14 @@ const RoleBeforeUpdate = async (ctx) => {
     const user = ctx.params.user;
     if (user.role == process.env["AdminRole"]) return ctx;
     if (!ctx.data._id) throw new Error("You don't have permission");
-    if (ctx.data._id != user._id) {
+
+    if (ctx.data._id !== String(user._id)) {
         logger.error(
             `this user => ${user._id} , try to update this user => ${ctx.data._id}`
         );
         throw new Error("You don't have permission");
     }
+
     delete ctx.data.role;
     return ctx;
 };

@@ -18,6 +18,7 @@ module.exports = function (app) {
             unique: true,
             dropDups: true,
         },
+        resetMobile: { type: Boolean },
         code: { type: String },
         expireAt: {
             type: Date,

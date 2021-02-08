@@ -123,7 +123,7 @@ exports.search_in_docs = async (req, res) => {
             res.status(200).send(search);
             return;
         }
-        const Query = {};
+        const Query = { root: true, vitrine: true, situation: "publish" };
         let area = req.query.area;
         if (area && area.length > 5) {
             let validArea = [];
@@ -169,9 +169,9 @@ exports.search_in_docs = async (req, res) => {
 };
 
 exports.remove_imgs = async (req, res) => {
-    const { removedImgs } = req.body;
-    if (!removedImgs) throw new Error("error on remove imgs");
-    removedImgs.forEach((img) => {
+    const { images } = req.body;
+    if (!images) throw new Error("error on remove imgs");
+    images.forEach((img) => {
         const path = `${req.app.get("public")}/UPLOADS/documents/${img}`;
         try {
             fs.unlinkSync(path);

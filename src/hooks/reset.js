@@ -15,7 +15,8 @@ const createCode = async (ctx) => {
     ctx.data = {
         user_id: user._id,
         username: user.username,
-        mobile: user.mobile,
+        mobile: ctx.data.mobile || user.mobile,
+        resetMobile: ctx.data.mobile ? true : false,
         code,
     };
     return ctx;
@@ -26,23 +27,27 @@ const sendMsg = async (ctx) => {
     if (!code) throw new Error("Server problem : generating code");
     let msg = "مسیج حاوی کد برای شما ارسال شد ...";
     let type = "info";
-    const token = "lzHZts1crv81Fh-9oS1NXecIj80ayUwlxE0I4Nsyck8=";
+    // console.log({ mobile, code });
     await axios
         .post(
             "http://rest.ippanel.com/v1/messages/patterns/send",
             {
-                originator: "+985000125475",
-                pattern_code: "8eh0d05o1x",
+                originator: process.env.FARAZ_NUMBER,
+                pattern_code: process.env.FARAZ_PATTERN_CODE,
                 recipient: mobile,
                 values: { code },
             },
-            { headers: { Authorization: `AccessKey ${token}` } }
+            {
+                headers: {
+                    Authorization: `AccessKey ${process.env.FARAZ_SMS_TOKEN}`,
+                },
+            }
         )
         .then()
         .catch((error) => {
             console.log("sending sms failed =>", { error });
             msg =
-                "مشکلی در ارسال مسیج بوجود آمده ... با پشتیبانی تماس بگیرید ... ";
+                "مشکلی در ارسال مسیج بوجود آمده ... لطفا چند دقیقه بعد امتحان کنید ... ";
             type = "error";
         });
 
@@ -53,16 +58,27 @@ const sendMsg = async (ctx) => {
 };
 
 const validate = (ctx) => {
-    const { username, code } = ctx.params.query;
+    const { username, code, mobile } = ctx.params.query;
     let valid = true;
-    if (!username || username.length < 4) valid = false;
+    let doestHowNeededField = true;
+    if (username) {
+        if (username.length < 4) valid = false;
+        doestHowNeededField = false;
+    }
+    if (mobile) {
+        if (mobile.match(/^(\+98|0)?9\d{9}$/g)) valid = false;
+        doestHowNeededField = false;
+    }
+    if (doestHowNeededField) valid = false;
+
     if (!code || code.length !== 6) valid = false;
+
     if (!valid) throw new Error("validation failed");
     return ctx;
 };
 
-const generateNewPassAndAuth = async (ctx) => {
-    console.log("generateNewPassAndAuth => ", ctx.result);
+const resetPassAndAuth = async (ctx) => {
+    // console.log("generateNewPassAndAuth => ", ctx.result);
     const _id = ctx.result[0].user_id;
     const Users = ctx.app.service("users").Model;
     // * create fake pass
@@ -89,9 +105,29 @@ const generateNewPassAndAuth = async (ctx) => {
     return ctx;
 };
 
+const resetMobile = async (ctx) => {
+    const _id = ctx.result[0].user_id;
+    const mobile = ctx.result[0].mobile;
+    const Users = ctx.app.service("users").Model;
+    const UserUpdated = await Users.findOneAndUpdate(
+        _id,
+        { mobile },
+        { new: true }
+    ).exec();
+    console.log({ UserUpdated });
+    ctx.result = { newMobile: UserUpdated.mobile };
+    return ctx;
+};
+
+const reset = async (ctx) => {
+    if (ctx.result[0].resetMobile) ctx = await resetMobile(ctx);
+    else ctx = await resetPassAndAuth(ctx);
+    return ctx;
+};
+
 module.exports = {
     createCode,
     sendMsg,
     validate,
-    generateNewPassAndAuth,
+    reset,
 };

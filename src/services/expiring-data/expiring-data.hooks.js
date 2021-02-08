@@ -2,27 +2,30 @@ const { authenticate } = require("@feathersjs/authentication").hooks;
 
 const { ValidRole, LimitQuery } = require("../../hooks/users");
 
-const resetPass = require("../../hooks/reset-password");
+const resetHooks = require("../../hooks/reset");
 
 module.exports = {
     before: {
         all: [],
         find: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
         get: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
-        create: [resetPass.createCode],
+        create: [resetHooks.createCode],
         update: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
         patch: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
-        remove: [LimitQuery(["$in", "$nin", "$ne", "$or"]), resetPass.validate],
+        remove: [
+            LimitQuery(["$in", "$nin", "$ne", "$or"]),
+            resetHooks.validate,
+        ],
     },
 
     after: {
         all: [],
         find: [],
         get: [],
-        create: [resetPass.sendMsg],
+        create: [resetHooks.sendMsg],
         update: [],
         patch: [],
-        remove: [resetPass.generateNewPassAndAuth],
+        remove: [resetHooks.reset],
     },
 
     error: {

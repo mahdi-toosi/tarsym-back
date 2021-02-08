@@ -3,7 +3,7 @@ const setFlags = async (req, res) => {
     try {
         const result = await docsModel.updateMany(
             { root: true },
-            { situation: "publish", vitrine: false, star: false, read: false }
+            { situation: "publish", vitrine: true, star: false, read: false }
         );
         res.status(200).send({
             Matched: result.n,
@@ -67,8 +67,35 @@ const addManyData = async (req, res) => {
     }
 };
 
+const moveTooltipToText = async (req, res) => {
+    const docsModel = req.app.service("documents").Model;
+    const docs = await docsModel.find({});
+    const results = [];
+    try {
+        for (let index = 0; index < docs.length; index++) {
+            const doc = docs[index];
+            const junk = JSON.parse(doc.junk);
+            junk.tools.forEach((tool) => {
+                const exTooltip = tool.tooltip;
+                tool.tooltip = { text: exTooltip, image: null };
+            });
+            doc.junk = JSON.stringify(junk);
+            const result = await docsModel.findByIdAndUpdate(doc._id, doc);
+            results.push(result._id);
+        }
+
+        res.status(200).send({
+            updatedDocsLength: results.length,
+            updatedDocs: results,
+        });
+    } catch (error) {
+        console.log("\n moveTooltipToText Error =>", error);
+    }
+};
+
 module.exports = {
     setFlags,
     setUsername,
     addManyData,
+    moveTooltipToText,
 };

@@ -12,6 +12,7 @@ module.exports = function (app) {
     app.get("/setFlags", blabla.setFlags);
     app.get("/setUsername", blabla.setUsername);
     app.get("/addManyData", blabla.addManyData);
+    app.get("/moveTooltipToText", blabla.moveTooltipToText);
 
     app.post(
         "/administrator/copyDoc",

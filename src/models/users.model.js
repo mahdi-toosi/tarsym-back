@@ -17,6 +17,7 @@ module.exports = function (app) {
             },
             avatar: { type: String },
             mobile: { type: String },
+            mobileVerified: { type: Boolean, default: false },
             nationalCode: { type: String },
             job: { type: String },
             city: { type: String },
