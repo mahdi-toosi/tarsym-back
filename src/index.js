@@ -12,4 +12,4 @@ const msg = `Application started on
     => http${host == "localhost" ? "" : "s"}://${host}:${port} 
     => with ${process.env.NODE_ENV || "development"} mode`;
 
-server.on("listening", () => console.log(msg));
+server.on("listening", () => logger.info(msg));

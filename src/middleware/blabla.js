@@ -1,16 +1,18 @@
+const logger = require("../logger");
+
 const setFlags = async (req, res) => {
     const docsModel = req.app.service("documents").Model;
     try {
         const result = await docsModel.updateMany(
             { root: true },
-            { situation: "publish", vitrine: true, star: false, read: false }
+            { situation: "publish", vitrine: false, star: false, read: false }
         );
         res.status(200).send({
             Matched: result.n,
             Modified: result.nModified,
         });
     } catch (error) {
-        console.log("\n updateDatabase Error =>", error);
+        logger.error(`updateDatabase  => ${error}`);
     }
 };
 
@@ -32,7 +34,7 @@ const setUsername = async (req, res) => {
             Modified: result.nModified,
         });
     } catch (error) {
-        console.log("\n setUsername Error =>", error);
+        logger.error(`setUsername  => ${error}`);
     }
 };
 
@@ -63,7 +65,7 @@ const addManyData = async (req, res) => {
 
         res.status(200).send({ result: "100 داکیومن ساخته شد" });
     } catch (error) {
-        console.log("\n addManyData Error =>", error);
+        logger.error(`addManyData  => ${error}`);
     }
 };
 
@@ -89,7 +91,7 @@ const moveTooltipToText = async (req, res) => {
             updatedDocs: results,
         });
     } catch (error) {
-        console.log("\n moveTooltipToText Error =>", error);
+        logger.error(`moveTooltipToText  => ${error}`);
     }
 };
 

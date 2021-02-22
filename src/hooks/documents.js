@@ -1,4 +1,5 @@
 const fs = require("fs");
+const logger = require("../logger");
 
 const remove_useless_fields = async (ctx) => {
     const response = ctx.result,
@@ -19,7 +20,7 @@ const remove_useless_fields = async (ctx) => {
         }
         return ctx;
     } catch (error) {
-        console.log("\n remove_useless_fields => ", error);
+        logger.error(`remove_useless_fields => ${error}`);
     }
 };
 
@@ -40,11 +41,13 @@ const remove_images_from_fs = (ctx) => {
                 try {
                     fs.unlinkSync(path);
                 } catch (error) {
-                    console.log("remove_images_from_fs error => ", error);
+                    logger.error(
+                        `remove_images_from_fs delete item => ${error}`
+                    );
                 }
             });
     } catch (error) {
-        console.log(error);
+        logger.error(`remove_images_from_fs  => ${error}`);
     }
     return ctx;
 };
@@ -62,7 +65,7 @@ const remove_childs = async (ctx) => {
         }
         return ctx;
     } catch (error) {
-        console.log("\n remove_childs => ", error);
+        logger.error(`remove_childs  => ${error}`);
     }
 };
 

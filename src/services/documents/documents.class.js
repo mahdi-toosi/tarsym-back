@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { Service } = require("feathers-mongoose");
+const logger = require("../../logger");
 
 exports.Documents = class Documents extends Service {};
 
@@ -20,7 +21,7 @@ exports.create_relationships = async (req, res) => {
             message: "relationships created",
         });
     } catch (error) {
-        console.log("\n create_relationships => ", error);
+        logger.error(`create_relationships  => ${error}`);
     }
 };
 
@@ -74,7 +75,7 @@ exports.copyDocForAdmin = async (req, res) => {
                 const d = docs[index];
                 const i = d.childs_id.indexOf(doc.old_ID);
                 if (i === -1) continue;
-                console.log(d.childs_id[i], " => ", adminNewDoc._id);
+                // console.log(d.childs_id[i], " => ", adminNewDoc._id);
                 d.childs_id[i] = adminNewDoc._id;
             }
             doc._id = adminNewDoc._id;
@@ -104,7 +105,7 @@ exports.copyDocForAdmin = async (req, res) => {
 
         res.status(201).send("copy created");
     } catch (error) {
-        console.log("\n copyDocForAdmin Error => ", error);
+        logger.error(`copyDocForAdmin  => ${error}`);
     }
 };
 
@@ -164,20 +165,37 @@ exports.search_in_docs = async (req, res) => {
             res.status(415).send({
                 error: "Mongo Error: area coordinates is not valid",
             });
-        else console.log("\n search_in_docs => ", error.codeName);
+        else logger.error(`search_in_docs  => ${error.codeName}`);
     }
 };
 
 exports.remove_imgs = async (req, res) => {
     const { images } = req.body;
-    if (!images) throw new Error("error on remove imgs");
+    if (!images) {
+        logger.error(`error on remove imgs , images => ${images}`);
+        throw new Error("error on remove imgs");
+    }
     images.forEach((img) => {
         const path = `${req.app.get("public")}/UPLOADS/documents/${img}`;
         try {
             fs.unlinkSync(path);
         } catch (error) {
-            console.log(error);
+            logger.error(`remove_imgs  => ${error.codeName}`);
         }
     });
     res.status(200).send("done");
+};
+
+exports.sendIframeDoc = async (req, res) => {
+    const docsModel = req.app.service("documents").Model;
+    const _ids = req.body.ids;
+    let result;
+    if (_ids.length === 1) {
+        result = await docsModel
+            .findOne({ _id: _ids[0], situation: "publish" })
+            .exec();
+    } else {
+        result = await docsModel.find({ _id: _ids }).exec();
+    }
+    res.status(200).send(result);
 };

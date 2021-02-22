@@ -2,7 +2,7 @@ const path = require("path");
 
 module.exports = {
     host: "localhost",
-    port: process.env.PORT,
+    port: process.env.PORT || 3000,
     public: path.join(__dirname, "../public"),
     paginate: {
         default: 30,
@@ -26,14 +26,14 @@ module.exports = {
             usernameField: "username",
             passwordField: "password",
         },
-        oauth: {
-            redirect: "/",
-            google: {
-                key: "<google oauth key>",
-                secret: "<google oauth secret>",
-                scope: ["email", "profile", "openid"],
-            },
-        },
+        // oauth: {
+        //     redirect: "/",
+        //     google: {
+        //         key: "<google oauth key>",
+        //         secret: "<google oauth secret>",
+        //         scope: ["email", "profile", "openid"],
+        //     },
+        // },
     },
     mongodb: process.env.MONGO_DB,
 };

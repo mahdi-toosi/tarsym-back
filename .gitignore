@@ -113,6 +113,7 @@ data/
 test
 public/imgs/
 public/statics/
+public/iframe/
 public/administrator/
 public/UPLOADS/images/
 public/UPLOADS/avatars/

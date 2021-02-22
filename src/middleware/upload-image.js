@@ -1,6 +1,8 @@
 const fs = require("fs");
 const multer = require("multer");
 const sharp = require("sharp");
+const logger = require("../logger");
+
 const uploadPath = "public/UPLOADS";
 
 // ! Store documents Images
@@ -70,7 +72,7 @@ const removeAvatarFromFS = (req) => {
     try {
         fs.unlinkSync(path);
     } catch (error) {
-        console.log(error);
+        logger.error(`removeAvatarFromFS  => ${error}`);
     }
 };
 

@@ -44,7 +44,7 @@ module.exports = {
     },
 
     after: {
-        all: [protect("password")],
+        all: [protect("password", "mobile", "nationalCode")],
         find: [ValidResultLength],
         get: [],
         create: [],

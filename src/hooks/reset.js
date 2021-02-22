@@ -1,5 +1,6 @@
 const bcrypt = require("bcryptjs");
 const axios = require("axios");
+const logger = require("../logger");
 
 const createCode = async (ctx) => {
     // * find user if exist
@@ -7,7 +8,12 @@ const createCode = async (ctx) => {
     const user = await usersModel
         .findOne({ username: ctx.data.username })
         .exec();
-    if (!user) throw new Error("username not found");
+    if (!user) {
+        logger.error(
+            `createCode => username not found , username => ${ctx.data.username}`
+        );
+        throw new Error("username not found");
+    }
 
     // * create Code
     const code = String(Math.floor(100000 + Math.random() * 9000));
@@ -24,7 +30,10 @@ const createCode = async (ctx) => {
 
 const sendMsg = async (ctx) => {
     const { mobile, code } = ctx.result;
-    if (!code) throw new Error("Server problem : generating code");
+    if (!code) {
+        logger.error("sendMsg => Server problem : generating code");
+        throw new Error("Server problem : generating code");
+    }
     let msg = "مسیج حاوی کد برای شما ارسال شد ...";
     let type = "info";
     // console.log({ mobile, code });
@@ -45,7 +54,7 @@ const sendMsg = async (ctx) => {
         )
         .then()
         .catch((error) => {
-            console.log("sending sms failed =>", { error });
+            logger.error(`sending sms  => ${error}`);
             msg =
                 "مشکلی در ارسال مسیج بوجود آمده ... لطفا چند دقیقه بعد امتحان کنید ... ";
             type = "error";
@@ -74,6 +83,7 @@ const validate = (ctx) => {
     if (!code || code.length !== 6) valid = false;
 
     if (!valid) throw new Error("validation failed");
+
     return ctx;
 };
 
@@ -114,7 +124,7 @@ const resetMobile = async (ctx) => {
         { mobile },
         { new: true }
     ).exec();
-    console.log({ UserUpdated });
+    // console.log({ UserUpdated });
     ctx.result = { newMobile: UserUpdated.mobile };
     return ctx;
 };
