@@ -1,5 +1,39 @@
 const logger = require("../logger");
 
+const setUserRoleInDocs = async (req, res) => {
+    const docsModel = req.app.service("documents").Model;
+    const usersModel = req.app.service("users").Model;
+    const results = [];
+    try {
+        const docs = await docsModel.find({});
+        for (let index = 0; index < docs.length; index++) {
+            const doc = docs[index];
+            const user = await usersModel.findById(doc.user._id);
+            const result = await docsModel.findByIdAndUpdate(doc._id, {
+                "user.role": user.role,
+            });
+            results.push(result);
+        }
+
+        res.status(200).send({ MatchedAndModified: results.length, results });
+    } catch (error) {
+        logger.error(`updateDatabase  => ${error}`);
+    }
+};
+
+const setSituation = async (req, res) => {
+    const docsModel = req.app.service("documents").Model;
+    try {
+        const result = await docsModel.updateMany({}, { situation: "publish" });
+        res.status(200).send({
+            Matched: result.n,
+            Modified: result.nModified,
+        });
+    } catch (error) {
+        logger.error(`updateDatabase  => ${error}`);
+    }
+};
+
 const setFlags = async (req, res) => {
     const docsModel = req.app.service("documents").Model;
     try {
@@ -100,4 +134,6 @@ module.exports = {
     setUsername,
     addManyData,
     moveTooltipToText,
+    setSituation,
+    setUserRoleInDocs,
 };

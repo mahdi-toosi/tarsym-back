@@ -11,27 +11,34 @@ const { ValidRole } = require("../../hooks/users");
 
 module.exports = {
     before: {
-        all: [authenticate("jwt")],
+        all: [],
         find: [],
         get: [],
         create: [
+            authenticate("jwt"),
             ValidRole(process.env["DrawerRole"]),
             (ctx) => {
                 const user = ctx.params.user;
                 if (!ctx.data.user)
-                    ctx.data.user = { _id: user._id, username: user.username };
+                    ctx.data.user = {
+                        _id: user._id,
+                        username: user.username,
+                        role: user.role,
+                    };
                 return ctx;
             },
         ],
         update: [
+            authenticate("jwt"),
             ValidRole(process.env["DrawerRole"]),
             (ctx) => {
                 ctx.data.read = false;
                 return ctx;
             },
         ],
-        patch: [ValidRole(process.env["DrawerRole"])],
+        patch: [authenticate("jwt"), ValidRole(process.env["DrawerRole"])],
         remove: [
+            authenticate("jwt"),
             ValidRole(process.env["DrawerRole"]),
             async (ctx) => {
                 const doc_id = ctx.id;

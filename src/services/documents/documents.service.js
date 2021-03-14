@@ -7,8 +7,8 @@ module.exports = function (app) {
     const options = {
         Model: createModel(app),
         paginate: {
-            default: 200,
-            max: 200,
+            default: 20,
+            max: 30,
         },
     };
 

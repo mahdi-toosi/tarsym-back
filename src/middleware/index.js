@@ -11,12 +11,13 @@ module.exports = function (app) {
     // in Express, the order matters.
     // custom api
 
-    app.get("/doc/*", (req, res) => {
+    app.get("/embed/*", (req, res) => {
         try {
             res.removeHeader("X-Frame-Options");
+            // res.set("Cache-control", `public, max-age=${60 * 60 * 24 * 7}`); // cache 7 day
             res.sendFile(path.join(app.get("public"), "iframe/index.html"));
         } catch (error) {
-            logger.error(`/doc/*  => ${error}`);
+            logger.error(`/embed/*  => ${error}`);
         }
     });
 
@@ -27,6 +28,8 @@ module.exports = function (app) {
     app.get("/setUsername", blabla.setUsername);
     app.get("/addManyData", blabla.addManyData);
     app.get("/moveTooltipToText", blabla.moveTooltipToText);
+    app.get("/setSituation", blabla.setSituation);
+    app.get("/setUserRoleInDocs", blabla.setUserRoleInDocs);
     // end blabla
 
     app.post(
@@ -37,12 +40,14 @@ module.exports = function (app) {
 
     app.post("/documents/create/relationship", Docs.create_relationships);
     app.post("/documents/remove/imgs", authenticate("jwt"), Docs.remove_imgs);
+    app.get("/documents/buu/taxonomies", authenticate("jwt"), Docs.taxonomies);
 
     app.get("/searchInDocs", Docs.search_in_docs); // TODO => is it need to check auth and role ?
 
     app.post(
         "/uploadDocImage",
         authenticate("jwt"),
+        UploadImage.validUserRole,
         UploadImage.storeDocImageWithMulter,
         UploadImage.resToClientForDoc
     );
@@ -62,6 +67,7 @@ module.exports = function (app) {
     // general routes
     app.get("/administrator/*", (req, res) => {
         try {
+            // res.set("Cache-control", `public, max-age=${60 * 60 * 24}`); // cache 1 day
             res.sendFile(
                 path.join(app.get("public"), "administrator/index.html")
             );
@@ -71,6 +77,7 @@ module.exports = function (app) {
     });
     app.get("*", (req, res) => {
         try {
+            // res.set("Cache-control", `public, max-age=${60 * 60 * 24 * 7}`); // cache 7 day
             res.sendFile(path.join(app.get("public"), "statics/index.html"));
         } catch (error) {
             logger.error(`*  => ${error}`);

@@ -38,19 +38,8 @@ const sendMsg = async (ctx) => {
     let type = "info";
     // console.log({ mobile, code });
     await axios
-        .post(
-            "http://rest.ippanel.com/v1/messages/patterns/send",
-            {
-                originator: process.env.FARAZ_NUMBER,
-                pattern_code: process.env.FARAZ_PATTERN_CODE,
-                recipient: mobile,
-                values: { code },
-            },
-            {
-                headers: {
-                    Authorization: `AccessKey ${process.env.FARAZ_SMS_TOKEN}`,
-                },
-            }
+        .get(
+            `http://ippanel.com:8080/?apikey=${process.env.FARAZ_SMS_TOKEN}&pid=${process.env.FARAZ_PATTERN_CODE}&fnum=${process.env.FARAZ_NUMBER}&tnum=${mobile}&p1=code&v1=${code}`
         )
         .then()
         .catch((error) => {

@@ -31,7 +31,11 @@ module.exports = function (app) {
             copiedFrom: { type: String },
             star: { type: Boolean },
             read: { type: Boolean },
-            user: { _id: String, username: { type: String } },
+            user: {
+                _id: String,
+                username: { type: String },
+                role: { type: Number, default: 35 },
+            },
         },
         { timestamps: true }
     );

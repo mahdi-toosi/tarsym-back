@@ -6,6 +6,9 @@ const hooks = require("./users.hooks");
 module.exports = function (app) {
     // * initial user roles
     process.env["AdminRole"] = 48;
+    process.env["DrawerRoleWithIframeAndImage"] = 38;
+    process.env["DrawerRoleWithIframe"] = 37;
+    process.env["DrawerRoleWithImage"] = 36;
     process.env["DrawerRole"] = 35;
     process.env["UserRole"] = 3;
     process.env["SuspensionRole"] = 1;

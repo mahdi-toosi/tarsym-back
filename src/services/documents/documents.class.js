@@ -112,16 +112,18 @@ exports.copyDocForAdmin = async (req, res) => {
 exports.search_in_docs = async (req, res) => {
     const docModel = req.app.service("documents").Model,
         SearchedText = req.query.text,
+        $skip = req.query.$skip || 0,
         forLayers = req.query.forLayers;
-    let search = [];
+    let search = [],
+        total;
     try {
         if (forLayers) {
             search = await docModel
                 .fuzzySearch(SearchedText)
                 .select("_id title excerpt")
-                .limit(30)
+                .limit(20)
                 .exec();
-            res.status(200).send(search);
+            res.status(200).send({ data: search });
             return;
         }
         const Query = { root: true, vitrine: true, situation: "publish" };
@@ -145,21 +147,41 @@ exports.search_in_docs = async (req, res) => {
             };
         }
 
-        if (SearchedText)
+        if (SearchedText) {
             search = await docModel
                 .fuzzySearch(SearchedText, Query)
                 .select(
                     "-createdAt -updatedAt -excerpt_fuzzy -title_fuzzy -__v"
                 )
+                .limit(20)
+                .skip($skip)
                 .exec();
-        else
+            total = await docModel
+                .fuzzySearch(SearchedText, Query)
+                .select(
+                    "-createdAt -updatedAt -excerpt_fuzzy -title_fuzzy -__v"
+                )
+                .countDocuments()
+                .exec();
+        } else {
             search = await docModel
                 .find(Query)
                 .select(
                     "-createdAt -updatedAt -excerpt_fuzzy -title_fuzzy -__v"
                 )
+                .limit(20)
+                .skip($skip)
                 .exec();
-        res.status(200).send(search);
+            total = await docModel
+                .find(Query)
+                .select(
+                    "-createdAt -updatedAt -excerpt_fuzzy -title_fuzzy -__v"
+                )
+                .countDocuments()
+                .exec();
+        }
+
+        res.status(200).send({ data: search, total });
     } catch (error) {
         if (error.codeName == "BadValue" && error.code == 2)
             res.status(415).send({
@@ -192,10 +214,36 @@ exports.sendIframeDoc = async (req, res) => {
     let result;
     if (_ids.length === 1) {
         result = await docsModel
-            .findOne({ _id: _ids[0], situation: "publish" })
+            .findOne({
+                _id: _ids[0],
+                situation: "publish",
+                "user.role": { $gte: 37 },
+            })
             .exec();
     } else {
-        result = await docsModel.find({ _id: _ids }).exec();
+        result = await docsModel
+            .find({
+                _id: _ids,
+                situation: "publish",
+                "user.role": { $gte: 37 },
+            })
+            .exec();
     }
-    res.status(200).send(result);
+    if (result) res.status(200).send(result);
+    else res.status(404).send();
+};
+
+exports.taxonomies = async (req, res) => {
+    const user_id = req.user._id;
+    const docsModel = req.app.service("documents").Model;
+
+    const tags = await docsModel
+        .distinct("tags", { "user._id": user_id })
+        .exec();
+    const categories = await docsModel
+        .distinct("categories", {
+            "user._id": user_id,
+        })
+        .exec();
+    res.status(200).send({ tags, categories });
 };

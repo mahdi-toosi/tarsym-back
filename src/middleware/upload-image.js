@@ -5,6 +5,12 @@ const logger = require("../logger");
 
 const uploadPath = "public/UPLOADS";
 
+const validUserRole = (req, res, next) => {
+    if (req.user.role >= process.env.DrawerRoleWithImage) {
+        next();
+    } else res.status(403).send();
+};
+
 // ! Store documents Images
 const storeInDocuments = multer.diskStorage({
     destination: (req, file, cb) => cb(null, `${uploadPath}/documents`),
@@ -77,6 +83,7 @@ const removeAvatarFromFS = (req) => {
 };
 
 module.exports = {
+    validUserRole,
     storeDocImageWithMulter,
     resToClientForDoc,
     storeAvatarWithMulter,
