@@ -1,7 +1,8 @@
 # Logs
 logs
 *.log
-
+dockerized
+.devcontainer
 # Runtime data
 pids
 *.pid
