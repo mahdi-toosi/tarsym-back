@@ -27,7 +27,7 @@ module.exports = {
             //     return ctx;
             // },
         ],
-        find: [],
+        find: [authenticate("jwt")],
         get: [authenticate("jwt")],
         create: [RoleBeforeCreate, hashPassword("password")],
         update: [

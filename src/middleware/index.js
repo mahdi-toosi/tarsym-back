@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 const Docs = require("../services/documents/documents.class");
+const Users = require("../services/users/users.class");
 const path = require("path");
 const { authenticate } = require("@feathersjs/express");
 const UploadImage = require("./upload-image");
@@ -41,6 +42,8 @@ module.exports = function (app) {
     app.post("/documents/create/relationship", Docs.create_relationships);
     app.post("/documents/remove/imgs", authenticate("jwt"), Docs.remove_imgs);
     app.get("/documents/buu/taxonomies", authenticate("jwt"), Docs.taxonomies);
+
+    // app.get("/isThereUser/:username", Users.isThereUser);
 
     app.get("/searchInDocs", Docs.search_in_docs); // TODO => is it need to check auth and role ?
 
