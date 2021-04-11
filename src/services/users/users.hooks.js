@@ -47,7 +47,14 @@ module.exports = {
         all: [protect("password", "mobile", "nationalCode")],
         find: [ValidResultLength],
         get: [],
-        create: [],
+        create: [
+            async (ctx) => {
+                await ctx.app
+                    .service("expiring-data")
+                    .create({ ...ctx.data, reason: "mobile verification" });
+                return ctx;
+            },
+        ],
         update: [],
         patch: [],
         remove: [],

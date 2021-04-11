@@ -12,14 +12,23 @@ module.exports = function (app) {
             type: String,
             unique: true,
             dropDups: true,
+            required: true,
         },
         mobile: {
             type: String,
             unique: true,
             dropDups: true,
+            required: true,
         },
-        resetMobile: { type: Boolean },
-        code: { type: String },
+        reason: {
+            type: String,
+            required: true,
+            // * can be
+            //  reset password
+            //  reset mobile
+            //  mobile verification
+        },
+        code: { type: String, required: true },
         expireAt: {
             type: Date,
             default: Date.now,

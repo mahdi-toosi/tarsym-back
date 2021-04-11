@@ -3,26 +3,26 @@ const axios = require("axios");
 const logger = require("../logger");
 
 const createCode = async (ctx) => {
-    // * find user if exist
+    const { username, reason } = ctx.data;
     const usersModel = ctx.app.service("users").Model;
-    const user = await usersModel
-        .findOne({ username: ctx.data.username })
-        .exec();
+    if (!username || !reason) throw new Error("username or reason not defined");
+
+    // * find user if exist
+    const user = await usersModel.findOne({ username }).exec();
     if (!user) {
         logger.error(
-            `createCode => username not found , username => ${ctx.data.username}`
+            `createCode => username not found , username => ${username}`
         );
         throw new Error("username not found");
     }
-
     // * create Code
     const code = String(Math.floor(100000 + Math.random() * 9000));
 
     ctx.data = {
         user_id: user._id,
-        username: user.username,
+        username: username,
         mobile: ctx.data.mobile || user.mobile,
-        resetMobile: ctx.data.mobile ? true : false,
+        reason,
         code,
     };
     return ctx;
@@ -34,7 +34,7 @@ const sendMsg = async (ctx) => {
         logger.error("sendMsg => Server problem : generating code");
         throw new Error("Server problem : generating code");
     }
-    let msg = "مسیج حاوی کد برای شما ارسال شد ...";
+    let msg = "مسیج حاوی کد احراز هویت برای شما ارسال شد ...";
     let type = "info";
     // console.log({ mobile, code });
     await axios
@@ -117,10 +117,16 @@ const resetMobile = async (ctx) => {
     ctx.result = { newMobile: UserUpdated.mobile };
     return ctx;
 };
+const mobileVerification = async (ctx) => {
+    return ctx;
+};
 
 const reset = async (ctx) => {
-    if (ctx.result[0].resetMobile) ctx = await resetMobile(ctx);
-    else ctx = await resetPassAndAuth(ctx);
+    const reason = ctx.result[0].reason;
+    if (reason === "reset mobile") ctx = await resetMobile(ctx);
+    else if (reason === "reset password") ctx = await resetPassAndAuth(ctx);
+    else if (reason === "mobile verification")
+        ctx = await mobileVerification(ctx);
     return ctx;
 };
 
