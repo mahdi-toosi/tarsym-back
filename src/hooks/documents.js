@@ -69,8 +69,55 @@ const remove_childs = async (ctx) => {
     }
 };
 
+async function updateChildrenSituations(children_ids, ctx) {
+    const Docs = ctx.app.service("documents").Model;
+    for (let index = 0; index < children_ids.length; index++) {
+        const child_id = children_ids[index];
+        const updatedDoc = await Docs.findOneAndUpdate(
+            child_id,
+            { situation: ctx.data.situation },
+            { new: true }
+        );
+        if (!updatedDoc.childs_id.length) continue;
+        await updateSituations(updatedDoc.childs_id, ctx);
+    }
+}
+
+const updateSituations = async (ctx) => {
+    if (!ctx.data.changeSituation) return ctx;
+    const children_ids = ctx.result.childs_id;
+    if (!children_ids.length) return ctx;
+    await updateChildrenSituations(children_ids, ctx);
+};
+
+const countFathers = async (ctx) => {
+    const doc_id = ctx.id;
+    const DocsModel = ctx.app.service("documents").Model;
+    const fathers = await DocsModel.find({
+        childs_id: doc_id,
+    }).countDocuments();
+
+    if (fathers < 2) return ctx;
+
+    throw new Error("documents has at least 2 fathers");
+};
+
+const setUser = (ctx) => {
+    const user = ctx.params.user;
+    if (!ctx.data.user)
+        ctx.data.user = {
+            _id: user._id,
+            username: user.username,
+            role: user.role,
+        };
+    return ctx;
+};
+
 module.exports = {
     remove_useless_fields,
     remove_images_from_fs,
     remove_childs,
+    updateSituations,
+    countFathers,
+    setUser,
 };

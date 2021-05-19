@@ -7,11 +7,11 @@ const resetHooks = require("../../hooks/reset");
 module.exports = {
     before: {
         all: [],
-        find: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
-        get: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
+        find: [authenticate("jwt"), ValidRole("AdminRole")],
+        get: [authenticate("jwt"), ValidRole("AdminRole")],
         create: [resetHooks.createCode],
-        update: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
-        patch: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
+        update: [authenticate("jwt"), ValidRole("AdminRole")],
+        patch: [authenticate("jwt"), ValidRole("AdminRole")],
         remove: [
             LimitQuery(["$in", "$nin", "$ne", "$or"]),
             resetHooks.validate,

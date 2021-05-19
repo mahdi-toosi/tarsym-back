@@ -5,6 +5,9 @@ const {
     remove_childs,
     remove_images_from_fs,
     remove_useless_fields,
+    updateSituations,
+    countFathers,
+    setUser,
 } = require("../../hooks/documents");
 
 const { ValidRole } = require("../../hooks/users");
@@ -14,44 +17,17 @@ module.exports = {
         all: [],
         find: [],
         get: [],
-        create: [
-            authenticate("jwt"),
-            ValidRole(process.env["DrawerRole"]),
-            (ctx) => {
-                const user = ctx.params.user;
-                if (!ctx.data.user)
-                    ctx.data.user = {
-                        _id: user._id,
-                        username: user.username,
-                        role: user.role,
-                    };
-                return ctx;
-            },
-        ],
+        create: [authenticate("jwt"), ValidRole("DrawerRole"), setUser],
         update: [
             authenticate("jwt"),
-            ValidRole(process.env["DrawerRole"]),
+            ValidRole("DrawerRole"),
             (ctx) => {
                 ctx.data.read = false;
                 return ctx;
             },
         ],
-        patch: [authenticate("jwt"), ValidRole(process.env["DrawerRole"])],
-        remove: [
-            authenticate("jwt"),
-            ValidRole(process.env["DrawerRole"]),
-            async (ctx) => {
-                const doc_id = ctx.id;
-                const DocsModel = ctx.app.service("documents").Model;
-                const fathers = await DocsModel.find({
-                    childs_id: doc_id,
-                }).countDocuments();
-
-                if (fathers < 2) return ctx;
-
-                throw new Error("documents has at least 2 fathers");
-            },
-        ],
+        patch: [authenticate("jwt"), ValidRole("DrawerRole")],
+        remove: [authenticate("jwt"), ValidRole("DrawerRole"), countFathers],
     },
 
     after: {
@@ -60,7 +36,7 @@ module.exports = {
         get: [],
         create: [],
         update: [],
-        patch: [],
+        patch: [updateSituations],
         remove: [remove_images_from_fs, remove_childs],
     },
 

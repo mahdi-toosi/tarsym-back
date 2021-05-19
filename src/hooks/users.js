@@ -31,7 +31,7 @@ const RoleBeforeUpdate = async (ctx) => {
 
 const ValidRole = (validRole) => (ctx) => {
     const user = ctx.params.user;
-    if (user.role <= validRole) {
+    if (user.role <= process.env[validRole]) {
         logger.error(
             `ValidRole => You don't have permission , username => ${user.username}`
         );
@@ -81,6 +81,29 @@ const ValidResultLength = (ctx) => {
         }
     }
 };
+async function removeKeys(obj, keys) {
+    await keys.forEach((key) => {
+        delete obj[key];
+    });
+    return;
+}
+
+const protectData = async (ctx) => {
+    const user = ctx.params.user;
+    const result = ctx.result.data || ctx.result;
+    let keys = ["mobile", "nationalCode"];
+    if (user && user.role === process.env["AdminRole"]) keys = [];
+
+    if (Array.isArray(result)) {
+        for (let index = 0; index < result.length; index++) {
+            const obj = result[index];
+            await removeKeys(obj, keys);
+        }
+    } else if (typeof result === "object") {
+        await removeKeys(result, keys);
+    }
+    return ctx;
+};
 
 module.exports = {
     RoleBeforeCreate,
@@ -88,4 +111,5 @@ module.exports = {
     ValidRole,
     LimitQuery,
     ValidResultLength,
+    protectData,
 };

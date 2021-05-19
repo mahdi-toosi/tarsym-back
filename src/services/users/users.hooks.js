@@ -3,6 +3,7 @@ const {
     RoleBeforeUpdate,
     ValidResultLength,
     ValidRole,
+    protectData,
 } = require("../../hooks/users");
 
 const { authenticate } = require("@feathersjs/authentication").hooks;
@@ -40,11 +41,11 @@ module.exports = {
             authenticate("jwt"),
             RoleBeforeUpdate,
         ],
-        remove: [authenticate("jwt"), ValidRole(process.env["AdminRole"])],
+        remove: [authenticate("jwt"), ValidRole("AdminRole")],
     },
 
     after: {
-        all: [protect("password", "mobile", "nationalCode")],
+        all: [protect("password"), protectData],
         find: [ValidResultLength],
         get: [],
         create: [

@@ -34,7 +34,7 @@ const sendMsg = async (ctx) => {
         logger.error("sendMsg => Server problem : generating code");
         throw new Error("Server problem : generating code");
     }
-    let msg = "مسیج حاوی کد احراز هویت برای شما ارسال شد ...";
+    let msg = "پیامک حاوی کد احراز هویت برای شما ارسال شد ...";
     let type = "info";
     // console.log({ mobile, code });
     await axios
@@ -45,7 +45,7 @@ const sendMsg = async (ctx) => {
         .catch((error) => {
             logger.error(`sending sms  => ${error}`);
             msg =
-                "مشکلی در ارسال مسیج بوجود آمده ... لطفا چند دقیقه بعد امتحان کنید ... ";
+                "مشکلی در ارسال پیامک بوجود آمده ... لطفا چند دقیقه بعد امتحان کنید ... ";
             type = "error";
         });
 
@@ -72,7 +72,6 @@ const validate = (ctx) => {
     if (!code || code.length !== 6) valid = false;
 
     if (!valid) throw new Error("validation failed");
-
     return ctx;
 };
 
@@ -127,6 +126,7 @@ const reset = async (ctx) => {
     else if (reason === "reset password") ctx = await resetPassAndAuth(ctx);
     else if (reason === "mobile verification")
         ctx = await mobileVerification(ctx);
+
     return ctx;
 };
 
